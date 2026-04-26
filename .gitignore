@@ -1,0 +1,12 @@
+# virtual environment
+.venv/ 
+
+# Python
+__pycache__/
+*.pyc
+
+# hidden file macOS
+.DS_Store
+
+# hidden file windows
+Thumbs.db
