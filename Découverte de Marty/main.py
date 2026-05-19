@@ -13,3 +13,5 @@ my_marty.stand_straight(100)
 #my_marty.eyes('normal',1000) #en haut
 #my_marty.eyes('wide',1000) #ecarté 
 #my_marty.eyes('wiggle',4000)#bouge partout
+#coup de pied ( le pied, l'angle de la cheville, le temps)
+my_marty.kick('right',0,2000)
