@@ -18,3 +18,7 @@ my_marty.stand_straight(1000)
 #les bras (angle bras gauche, angle bras droit, tmps dep)
 #de -80 à 140 (-80 bras en arrière, 140 en haut et 0 en bas le long du corps)
 #my_marty.arms(0,0,2000)
+#se pencher 
+#my_marty.lean('forward',45,2000) #0 droit, 45 à fond en avant
+#my_marty.lean('back',45,2000)#0 droit, 45 à fond en arrière
+my_marty.lean('right',60,2000)#0 droit, 60 à fond squr le coté
