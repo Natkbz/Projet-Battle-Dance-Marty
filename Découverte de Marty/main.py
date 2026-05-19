@@ -21,4 +21,7 @@ my_marty.stand_straight(1000)
 #se pencher 
 #my_marty.lean('forward',45,2000) #0 droit, 45 à fond en avant
 #my_marty.lean('back',45,2000)#0 droit, 45 à fond en arrière
-my_marty.lean('right',60,2000)#0 droit, 60 à fond squr le coté
+#my_marty.lean('right',60,2000)#0 droit, 60 à fond squr le coté
+#pas sur le coté
+my_marty.sidestep('left',2,35,2000)
+my_marty.sidestep('right',2,35,2000)
