@@ -1,27 +1,26 @@
 from martypy import Marty
 
 
-my_marty = Marty("wifi","192.168.0.101")
-#marche en avant
-#my_marty.walk(3,'auto',0,30,4000) 
-#se remet droit normal
-my_marty.stand_straight(1000)
-#dance 
-#my_marty.dance('right',  3000)
-#yeux (emotion, temps de deplacement ms)
-#my_marty.eyes('angry',1000) #froncé
-#my_marty.eyes('normal',1000) #en haut
-#my_marty.eyes('wide',1000) #ecarté 
-#my_marty.eyes('wiggle',4000)#bouge partout
-#coup de pied ( le pied, l'angle de la cheville, le temps)
-#my_marty.kick('right',0,2000)
-#les bras (angle bras gauche, angle bras droit, tmps dep)
-#de -80 à 140 (-80 bras en arrière, 140 en haut et 0 en bas le long du corps)
-#my_marty.arms(0,0,2000)
-#se pencher 
-#my_marty.lean('forward',45,2000) #0 droit, 45 à fond en avant
-#my_marty.lean('back',45,2000)#0 droit, 45 à fond en arrière
-#my_marty.lean('right',60,2000)#0 droit, 60 à fond squr le coté
-#pas sur le coté
-my_marty.sidestep('left',2,35,2000)
-my_marty.sidestep('right',2,35,2000)
+def connect(addresse_ip) :
+    marty = Marty("wifi",addresse_ip)
+    marty.stand_straight(500)
+    return marty
+
+def move(marty,direction,nb_step):
+    step_length = 30
+    time_by_step = 1000
+    if(direction == 'U'):
+        marty.walk(nb_step,'auto',0,step_length,time_by_step*nb_step)
+    elif(direction == 'B'): 
+        marty.walk(nb_step,'auto',0,-step_length,time_by_step*nb_step)
+    elif(direction == 'L'): 
+        marty.sidestep('left',nb_step,step_length,time_by_step*nb_step)
+    elif(direction == 'R'): 
+        marty.sidestep('right',nb_step,step_length,time_by_step*nb_step)
+    marty.stand_straight(500)
+
+
+my_marty = connect("192.168.0.101")
+move(my_marty,'U',3)
+move(my_marty,'L',1)
+move(my_marty,'B',2)
