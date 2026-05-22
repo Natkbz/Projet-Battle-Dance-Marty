@@ -6,10 +6,10 @@ from MartyContext import MartyContext
 def main():
     ip_robot = "192.168.0.109"  
 
-    mon_marty = MartyContext(ip_robot)
+    my_marty = MartyContext(ip_robot)
 
-
-    mon_marty.move_foot('U', 3)
+    my_marty.move_arm('ALU')
+    my_marty.eyes_expression('wide')
     
 
 # Point d'entrée du script
@@ -17,10 +17,7 @@ if __name__ == "__main__":
     main()
 
 """"
-def move_arm(marty,type):
-    if(type == 'ALU'):
-        marty.move_joint('left arm', 140, 1000)
-    
+ 
     
 def getColor(marty):
     colorR = marty.get_color_sensor_value_by_channel('left','red')
