@@ -25,3 +25,6 @@ my_marty.stand_straight(1000)
 #pas sur le coté
 #my_marty.sidestep('left',2,35,2000)
 #my_marty.sidestep('right',2,35,2000)
+
+#batterie = my_marty.get_battery_remaining()
+#print("batterie :", batterie)
