@@ -29,7 +29,28 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_header("Content-type", "text")
             self.end_headers()
             
-            self.wfile.write(bytes(recherche_robot(list[3]).score_final))
+            self.wfile.write(bytes(recherche_robot(list[2]).score_final))
+            
+            
+    def do_POST(self):
+        request = self.requestline
+        list = request.split(" ")
+        
+        if(list[1] == "/hello"):
+            newRobot = Robot()
+            newId = ("bot" + len(liste_robots))
+            newRobot.setId(newId)
+            
+            liste_robots.append(newRobot)
+            
+            self.send_response(200)
+            self.send_header("Content-type", "text")
+            self.end_headers()
+            
+            self.wfile.write(bytes(recherche_robot(list[2]).score_final))
+            
+            
+            
 
 server = http.server.HTTPServer(("127.0.0.1", PORT), Handler)
 
