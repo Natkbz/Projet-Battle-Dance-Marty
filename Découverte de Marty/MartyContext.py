@@ -40,4 +40,7 @@ class MartyContext():
             self.marty.eyes(emotion)
         else : 
             print ("Emotion is not valid")
+            
+    def getBatterie(self):
+        return self.marty.get_battery_remaining
         
