@@ -8,6 +8,7 @@ liste_robots = []
 
 countRobots = 0
 
+
 def recherche_robot(id):
     for i in range(len(liste_robots)):
         if(liste_robots[i].id == id):
@@ -27,6 +28,16 @@ class Robot():
         self.id = id
     def setNbrDePasRestants(self, nbr):
         self.nombreDePasRestants = nbr
+
+
+
+################### POUR LES TESTS ##################
+robot_1 = Robot()
+robot_1.setId("robtest1")
+liste_robots.append(robot_1)
+#####################################################
+
+
         
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
@@ -45,7 +56,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_header("Content-type", "text")
             self.end_headers()
             
-            self.wfile.write(bytes(recherche_robot(idRequeset).score_final))
+            self.wfile.write(bytes(robot_1.score_final))               ########################## A MODIFIER, POUR UN TEST UNIQUEMENT !!!! #############################
             
             
     def do_POST(self):
@@ -94,9 +105,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
 server = http.server.HTTPServer(("127.0.0.1", PORT), Handler)
 
 
-robot_1 = Robot()
-liste_robots.append(robot_1)
-robot_1.setId("robtest1")
+
+
 
 
 def run() :
