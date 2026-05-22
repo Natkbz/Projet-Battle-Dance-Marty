@@ -39,11 +39,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(self.server_version.encode()))
         elif(list[1] == "/score"):
+            idRequeset = self.rfile.readline()
+            
             self.send_response(200)
             self.send_header("Content-type", "text")
             self.end_headers()
             
-            idRequeset = self.rfile.readline()
             self.wfile.write(bytes(recherche_robot(idRequeset).score_final))
             
             
@@ -95,6 +96,7 @@ server = http.server.HTTPServer(("127.0.0.1", PORT), Handler)
 
 robot_1 = Robot()
 liste_robots.append(robot_1)
+robot_1.setId("robtest1")
 
 
 def run() :
