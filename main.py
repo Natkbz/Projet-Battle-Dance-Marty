@@ -1,14 +1,22 @@
 import http.server
 
-PORT = 8000
+PORT = 8080
 
 nombreDePasBattle = 10    ########TEMPORAIRE#########
+
+liste_robots = []
+
+countRobots = 0
 
 def recherche_robot(id):
     for i in range(len(liste_robots)):
         if(liste_robots[i].id == id):
             return liste_robots[i]
-
+        
+def supprimer_robot(id):
+    for i in range(len(liste_robots)):
+        if(liste_robots[i].id == id):
+            liste_robots.pop(i)
 
 class Robot():
     score_final = 0
@@ -45,9 +53,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
         
         if(list[1] == "/hello"):
             newRobot = Robot()
-            newId = ("bot" + len(liste_robots))
+            newId = ("bot" + countRobots)
             newRobot.setId(newId)
             
+            countRobots += 1
             liste_robots.append(newRobot)
             
             self.send_response(200)
@@ -67,14 +76,23 @@ class Handler(http.server.BaseHTTPRequestHandler):
             
             self.wfile.write(bytes(nombreDePasBattle))
             
+        elif(list[1] == "/bye"):
+            idRequeset = self.rfile.readline()
+            
+            supprimer_robot(idRequeset)
+            
+            self.send_response(200)
+            self.send_header("Content-type", "text")
+            self.end_headers()
+            
+            self.wfile.write(bytes("OK".encode()))
             
             
             
-
+                  
 server = http.server.HTTPServer(("127.0.0.1", PORT), Handler)
 
 
-liste_robots = []
 robot_1 = Robot()
 liste_robots.append(robot_1)
 
