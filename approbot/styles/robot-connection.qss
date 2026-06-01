@@ -1,55 +1,99 @@
-QWidget{
-    background-color: #FFFFFF;
+QWidget {
+    background-color: #f4f8ff;
+    font-family: "Roboto";
 }
 
-QLabel{
-    color: #464d55;
-    font-weight: 600;
+QMainWindow {
+    background-color: #f4f8ff;
 }
 
-QLabel#heading{
-    color: #0f1925;
-    font-size: 18px;
-    margin-bottom: 10px;
+/* Carte blanche centrale */
+QWidget#form_card {
+    background-color: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #c8d8f0;
 }
 
-QLabel#subheading{
-    color: #0f1925;
+/* Titre principal */
+QLabel#heading {
+    font-size: 17px;
+    font-weight: 500;
+    color: #1a2a4a;
+}
+
+/* Sous-titre */
+QLabel#subheading {
     font-size: 12px;
-    font-weight: normal;
-    margin-bottom: 10px;
+    color: #8899bb;
 }
 
+/* Label "ADRESSE IP" */
+QLabel#input_label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #4a5a7a;
+    letter-spacing: 1px;
+}
+
+/* Statut de connexion */
+QLabel#status {
+    font-size: 12px;
+    color: #aabbcc;
+}
+
+QLabel#status_ok {
+    font-size: 12px;
+    color: #3dbfa0;
+}
+
+QLabel#status_error {
+    font-size: 12px;
+    color: #e05a5a;
+}
+
+/* Champ texte IP */
 QLineEdit {
-  border-radius: 8px;
-  border: 1px solid #e0e4e7;
-  padding: 5px 15px;
+    background-color: #f4f7ff;
+    border: 1.5px solid #c8d8f0;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: #1a2a4a;
 }
 
-QLineEdit:focus { 
-  border: 1px solid #d0e3ff;
+QLineEdit:focus {
+    border: 1.5px solid #6395EE;
 }
 
-QLineEdit::placeholder {
-  color: #767e89;
+/* Bouton principal — Se connecter */
+QPushButton#btn_primary {
+    background-color: #6395EE;
+    color: #ffffff;
+    border-radius: 9px;
+    border: none;
+    padding: 11px 0px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
-QPushButton {
-  background-color: #0d6efd;
-  color: #fff;
-  font-weight: 600;
-  border-radius: 8px;
-  border: 1px solid #0d6efd;
-  padding: 5px 15px;
-  margin-top: 10px;
-  outline: 0px;
+QPushButton#btn_primary:hover {
+    background-color: #4d7ee0;
 }
 
-QPushButton:hover,
-QPushButton:focus {
-  background-color: #0b5ed7;
-  border: 3px solid #9ac3fe;
+QPushButton#btn_primary:pressed {
+    background-color: #3a6dd0;
 }
 
+/* Bouton secondaire — Recherche automatique */
+QPushButton#btn_secondary {
+    background-color: #eef6f4;
+    color: #3dbfa0;
+    border-radius: 9px;
+    border: 1.5px solid #85DECB;
+    padding: 10px 0px;
+    font-size: 13px;
+}
 
-
+QPushButton#btn_secondary:hover {
+    background-color: #d8f0eb;
+}
