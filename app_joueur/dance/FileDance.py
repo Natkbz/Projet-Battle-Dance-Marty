@@ -39,3 +39,9 @@ class FileDance:
                 print("Erreur lors du décodage du fichier: Pas de ACT")      
         else : 
             print("Erreur lors du décodage du fichier: Pas de SEQ")
+            
+    def getMvt(self):
+        return self.movement
+    
+    def getColorDance(self):
+        return self.colorDance
