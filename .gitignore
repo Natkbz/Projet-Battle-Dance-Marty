@@ -10,3 +10,6 @@ __pycache__/
 
 # hidden file windows
 Thumbs.db
+
+# vscode preferences
+.vscode/
