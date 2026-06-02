@@ -35,20 +35,56 @@ class Client():
         return id
     
     
-
-    
-    
-    
-    
-    
-    
-client = Client("127.0.0.1", 8080)
-id1 = client.getId()
-print(f"Mon id unique est : {id1}")
-client2 = Client("127.0.0.1", 8080)
-id2 = client2.getId()
-print(f"Le miens est : {id2}")
+    def getScore(self, id):
+        self.conn.request("GET", "/score", body=id)
         
+        response = self.conn.getresponse()
+
+        score = response.read().decode()
+        print(response.status)
+        print(score)
+        
+        return score
+    
+    
+    def start(self, id):
+        self.conn.request("POST", "/start", body=id)
+        
+        response = self.conn.getresponse()
+        
+        nbrPas = response.read().decode()
+        print(response.status)
+        print(nbrPas)
+        
+        return nbrPas
+        
+    
+    def deconnecter(self, id):
+        self.conn.request("POST", "/bye", body=id)
+        
+        response = self.conn.getresponse()
+        
+        rep = response.read().decode()
+        print(response.status)
+        print(rep)
+        
+        return rep
+    
+    
+    
+    
+    
+###TESTS################################    
+# client = Client("127.0.0.1", 8080)
+# id1 = client.getId()
+# print(client.start(id1))
+# print(client.getScore(id1))
+# print(client.deconnecter(id1))
+# print(f"Mon id unique est : {id1}")
+# client2 = Client("127.0.0.1", 8080)
+# id2 = client2.getId()
+# print(f"Le miens est : {id2}")
+########################################
         
     
     
