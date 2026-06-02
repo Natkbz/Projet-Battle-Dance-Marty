@@ -19,6 +19,11 @@ def supprimer_robot(id):
     for i in range(len(liste_robots)):
         if(liste_robots[i].id == id):
             liste_robots.pop(i)
+            
+def calculPoint(col, arm, exp):
+    ##############TO DO : CALCULER LES POINTS
+    
+    return "0"
 
 class Robot():
     score_final = 0
@@ -106,6 +111,23 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(bytes("OK".encode()))
             
             
+        elif(list[1] == "/step"):
+            length = int(self.headers['Content-Length'])
+            string = self.rfile.read(length).decode()
+            list_data = string.split(" ")
+            
+            robot_id = list_data[0]
+            col = list_data[1]
+            arm = list_data[2]
+            exp = list_data[3]
+            
+            point = calculPoint(col, arm, exp)
+            
+            self.send_response(200)
+            self.send_header("Content-type", "text")
+            self.end_headers()
+            
+            self.wfile.write(bytes(point.encode()))
             
                   
 server = http.server.HTTPServer(("127.0.0.1", PORT), Handler)
