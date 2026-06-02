@@ -1,4 +1,5 @@
 import http.server
+import random
 
 PORT = 8080
 
@@ -67,7 +68,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         
         if(list[1] == "/hello"):
             newRobot = Robot()
-            newId = ("bot")
+            newId = (str(random.randint(0,999999)))
             newRobot.setId(newId)
             
             #countRobots += 1
