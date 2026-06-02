@@ -4,7 +4,7 @@ from ui.connection_window import ConnectionWindow
 
 app = QApplication(sys.argv)
 
-with open("approbot/styles/robot-connection.qss", "r") as f:
+with open("app_joueur/styles/robot-connection.qss", "r") as f:
     app.setStyleSheet(f.read())
 
 window = ConnectionWindow()
