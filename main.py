@@ -2,7 +2,7 @@ import http.server
 
 PORT = 8080
 
-nombreDePasBattle = 10    ########TEMPORAIRE#########
+nombreDePasBattle = "10"    ########TEMPORAIRE#########
 
 liste_robots = []
 
@@ -50,13 +50,15 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(self.server_version.encode()))
         elif(list[1] == "/score"):
-            idRequeset = self.rfile.readline()
+            length = int(self.headers['Content-Length'])
+            robot_id = self.rfile.read(length).decode()
             
             self.send_response(200)
             self.send_header("Content-type", "text")
             self.end_headers()
             
-            self.wfile.write(bytes(robot_1.score_final))               ########################## A MODIFIER, POUR UN TEST UNIQUEMENT !!!! #############################
+            self.wfile.write(bytes(str(recherche_robot(robot_id).score_final).encode()))              
+            print(robot_1.score_final)
             
             
     def do_POST(self):
@@ -65,33 +67,36 @@ class Handler(http.server.BaseHTTPRequestHandler):
         
         if(list[1] == "/hello"):
             newRobot = Robot()
-            newId = ("bot" + countRobots)
+            newId = ("bot")
             newRobot.setId(newId)
             
-            countRobots += 1
+            #countRobots += 1
             liste_robots.append(newRobot)
             
             self.send_response(200)
             self.send_header("Content-type", "text")
             self.end_headers()
             
-            self.wfile.write(bytes(newId))
+            self.wfile.write(bytes(newId.encode()))
             
         elif(list[1] == "/start"):
-            idRequeset = self.rfile.readline()
+            length = int(self.headers['Content-Length'])
+            robot_id = self.rfile.read(length).decode()
+            print(robot_id)
             
-            recherche_robot(idRequeset).setNbrDePasRestants(nombreDePasBattle)
+            recherche_robot(robot_id).setNbrDePasRestants(int(nombreDePasBattle))
             
             self.send_response(200)
             self.send_header("Content-type", "text")
             self.end_headers()
             
-            self.wfile.write(bytes(nombreDePasBattle))
+            self.wfile.write(bytes(nombreDePasBattle.encode()))
             
         elif(list[1] == "/bye"):
-            idRequeset = self.rfile.readline()
+            length = int(self.headers['Content-Length'])
+            robot_id = self.rfile.read(length).decode()
             
-            supprimer_robot(idRequeset)
+            supprimer_robot(robot_id)
             
             self.send_response(200)
             self.send_header("Content-type", "text")
