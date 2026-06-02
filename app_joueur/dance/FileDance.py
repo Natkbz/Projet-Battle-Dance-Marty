@@ -3,6 +3,7 @@ class FileDance:
         self.file = open(path, 'r')
         self.movement = [] #format: [(dir1,step1),(dir2,step2)]
         self.colorDance = {} #format: {color1 : (bras,expr), color2 : (bras,expr)}
+        self.decode()
     
     def close(self):
         self.file.close()
