@@ -51,10 +51,33 @@ class MartyContext():
     def eyes_expression(self,emotion):
         valid_emotion = { "angry", "excited", "normal", "wide", "wiggle"}
         if emotion in valid_emotion:
-            self.marty.eyes(emotion)
+            self.marty.eyes(emotion,4000)
         else : 
             print ("Emotion is not valid")
-            
+    
+    def expression(self,expr):
+        valid_expression={"XNT","XSD","XNG","XHP","XND"}
+        if expr in valid_expression:
+            match expr:
+                case "XNT":
+                    self.marty.stand_straight(1000,False)
+                    self.eyes_expression("normal")
+                case "XSD":
+                    self.marty.stand_straight(1000,False)
+                    self.eyes_expression("wide")
+                case "XNG":
+                    self.marty.stand_straight(1000,False)
+                    self.eyes_expression("angry")
+                case "XHP":
+                    self.marty.dance('right',4000,False)
+                    self.eyes_expression("normal")
+                case "XND":
+                    self.marty.dance('right',4000)
+                    self.eyes_expression("wiggle",False)
+        else:
+            print("Expression non valide")
+        
+        
     def getBattery(self):
         return self.marty.get_battery_remaining
     
