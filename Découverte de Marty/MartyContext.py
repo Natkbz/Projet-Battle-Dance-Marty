@@ -1,9 +1,23 @@
 from martypy import Marty
+from MartyColor import MartyColor
 
 class MartyContext():
-    def __init__(self,addressIp):
-        self.marty = Marty("wifi",addressIp)
-        self.marty.stand_straight(500)
+    def __init__(self, addressIP):
+        self.addressIP = addressIP
+        self.marty = None
+        self.martyColor = None
+
+    def connect(self):
+        try:
+            self.marty = Marty("wifi", self.addressIP)
+            if self.marty.is_conn_ready():
+                self.marty.stand_straight(500)
+                self.martyColor = MartyColor(self.marty)
+                return True
+            return False
+        except Exception as e:
+            print(f"Erreur lors de la connexion à {self.addressIP} : {e}")
+            return False
         
     def move_foot(self,direction,nb_step):
         step_length = 30
@@ -41,6 +55,11 @@ class MartyContext():
         else : 
             print ("Emotion is not valid")
             
-    def getBatterie(self):
+    def getBattery(self):
         return self.marty.get_battery_remaining
-        
+    
+    def getColor(self):
+        return self.martyColor.detectColor()
+    
+    def CalibrateColor(self):
+        self.martyColor.lunchFullCalibration()        
