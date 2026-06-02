@@ -61,6 +61,8 @@ class Robot():
         self.id = id
     def setNbrDePasRestants(self, nbr):
         self.nombreDePasRestants = nbr
+    def addToScore_final(self, point):
+        self.score_final += point
 
 
 
@@ -149,6 +151,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             exp = list_data[3]
             
             point = calculPoint(col, arm, exp)
+            recherche_robot(robot_id).addToScore_final(int(point))
             
             self.send_response(200)
             self.send_header("Content-type", "text")
