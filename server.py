@@ -34,7 +34,7 @@ def calculPoint(col, arm, exp):
         if(line == f"[{col}]" or line == f"[{col}]\n"):
             break
         elif(line == "" or line == "\n"):
-            return res
+            return str(res)
         
     nextLine = f.readline()
     
@@ -100,7 +100,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         
         if(list[1] == "/hello"):
             newRobot = Robot()
-            newId = (str(random.randint(0,999999)))
+            newId = (str(random.randint(0,9999999)))
             newRobot.setId(newId)
             
             #countRobots += 1
