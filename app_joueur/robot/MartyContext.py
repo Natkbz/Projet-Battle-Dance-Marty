@@ -1,5 +1,5 @@
 from martypy import Marty
-from MartyColor import MartyColor
+from robot.MartyColor import MartyColor
 
 class MartyContext():
     def __init__(self, addressIP):
@@ -13,6 +13,7 @@ class MartyContext():
             if self.marty.is_conn_ready():
                 self.marty.stand_straight(500)
                 self.martyColor = MartyColor(self.marty)
+                print("connexion réussi")
                 return True
             return False
         except Exception as e:

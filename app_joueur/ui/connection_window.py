@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QFont, QPainter, QColor
-from robot.marty_controller import MartyController
+from robot.MartyContext import MartyContext
 
 # widget = tout élément visible à l'écran (bouton, label etc...)
 # layout = gestionnaire invisible pour organiser les widgets
@@ -58,7 +58,7 @@ class ConnectionWindow(QMainWindow):
         self.setMinimumSize(800, 600)
         self.setWindowIcon(QIcon("approbot/assets/images/robot_icon.png"))
 
-        self.marty = MartyController() # instance de la classe pour contrôler le robot
+        self.marty = None # instance de la classe pour contrôler le robot
 
         # widget central (fond)
         central_widget = QWidget()
@@ -163,7 +163,8 @@ class ConnectionWindow(QMainWindow):
             return
 
         self._set_status("Connexion en cours...", "status")
-        success = self.marty.connect(ip)
+        self.marty = MartyContext(ip)
+        success = self.marty.connect()
 
         if success:
             self._set_status(f"Connecté à {ip} !", "status_ok")
