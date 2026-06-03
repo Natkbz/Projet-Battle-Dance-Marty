@@ -88,11 +88,11 @@ class Client():
     
     
 # ###############TESTS###################    
-# client = Client("127.0.0.1", 8080)
+# client = Client("10.169.196.150", 8080)
 # id1 = client.getId()
 # print(client.start(id1))
 # print(client.getScore(id1))
-# print(f"points du step : {client.sendStep("robtest1", "G", "ALU+ARU", "XNT")}")
+#print(f"points du step : {client.sendStep("robtest1", "B", "ALU", "XSD")}")
 # print(client.getScore(id1))
 # print(client.deconnecter(id1))
 # print(f"Mon id unique est : {id1}")
