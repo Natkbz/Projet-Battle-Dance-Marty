@@ -17,10 +17,11 @@ class Client():
         
         response = self.conn.getresponse()
         
+        rep = response.read().decode()
         print(response.status)
-        print(response.read().decode())
+        print(rep)
         
-        return response.read().decode()
+        return rep
     
     
     def getId(self):
