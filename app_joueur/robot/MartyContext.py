@@ -76,9 +76,10 @@ class MartyContext():
                     self.marty.dance('right',4000)
                     self.eyes_expression("wiggle",False)
         else:
-            print("Expression non valide")
+            print(f"Expression {expr} non valide ")
         
-        
+    def normal(self,duration):
+        return self.marty.stand_straight(duration)
     def getBattery(self):
         return self.marty.get_battery_remaining
     
