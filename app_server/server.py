@@ -1,5 +1,6 @@
 import http.server
 import random
+import socket
 
 PORT = 8080
 
@@ -160,14 +161,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(bytes(point.encode()))
             
                   
-server = http.server.HTTPServer(("127.0.0.1", PORT), Handler)
 
-
-
-
+def getIpServer():
+    hostname = socket.gethostname()
+    ip_locale = socket.gethostbyname(hostname)
+    
+    return ip_locale
 
 
 def run() :
+    server = http.server.HTTPServer((getIpServer(), PORT), Handler)
     print("serving at port", PORT)
     server.serve_forever()
 
