@@ -12,7 +12,6 @@ f.close()
 
 liste_robots = []
 
-countRobots = 0
 
 
 def recherche_robot(id):
@@ -26,32 +25,45 @@ def supprimer_robot(id):
             liste_robots.pop(i)
             
 def calculPoint(col, arm, exp):
-    # res = 0
+    res = 0
     
-    # f = open(".battle")
+    f = open("app_server/.battle")
     
-    # while(True):
-    #     line = f.readline()
-    #     if(line == f"[{col}]" or line == f"[{col}]\n"):
-    #         break
-    #     elif(line == "" or line == "\n"):
-    #         return str(res)
+    while(True):
+        line = f.readline()
+        if(line == f"[{col}]" or line == f"[{col}]\n"):
+            break
+        elif(line == "" or line == "\n"):
+            return str(res)
         
-    # nextLine = f.readline()
+    nextLine = f.readline()
     
-    # while(nextLine[0] != "["):
-    #     splitEgal = nextLine.split("=")
-    #     splitVirgule = splitEgal[0].split(",")
-    #     for i in range(0, len(splitVirgule)):
-    #         if(splitVirgule[i] == arm):
-    #             res += splitEgal[1]
-            
-                
-                        
-        
-    ##############TO DO : CALCULER LES POINTS
+    while(nextLine[0] != "["):
+        splitEgal = nextLine.split("=")
+        splitVirgule = splitEgal[0].split(",")
+        for i in range(0, len(splitVirgule)):
+            if(exp == splitVirgule[i]):
+                res += int(splitEgal[1])
+                print("exp")
+            if(len(arm) > 4):
+                if(arm == splitVirgule[i]):
+                    res += int(splitEgal[1])
+                    print("a+b = a+b")
+                elif(arm[0:3] == splitVirgule[i]):
+                    res += int(splitEgal[1])
+                    print("a+b = a")
+                elif(arm[4::] == splitVirgule[i]):
+                    res += int(splitEgal[1])
+                    print(f"a+b = b ({arm[4::]})")
+            else:
+                if(arm == splitVirgule[i]):
+                    res += int(splitEgal[1])
+                    print("arm")
+        nextLine = f.readline()
     
-    return "0"
+    f.close()
+    return str(res)
+    
 
 class Robot():
     score_final = 0
@@ -106,7 +118,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
             newId = (str(random.randint(0,9999999)))
             newRobot.setId(newId)
             
-            #countRobots += 1
             liste_robots.append(newRobot)
             
             self.send_response(200)
