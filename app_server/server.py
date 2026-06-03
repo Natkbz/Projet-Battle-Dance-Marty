@@ -3,7 +3,7 @@ import random
 
 PORT = 8080
 
-f = open(".battle")
+f = open("app_server/.battle")
 line = f.readline()
 tab = line.split(" ")
 nombreDePasBattle = str(tab[1])
@@ -25,32 +25,32 @@ def supprimer_robot(id):
             liste_robots.pop(i)
             
 def calculPoint(col, arm, exp):
-    res = 0
+    # res = 0
     
-    f = open(".battle")
+    # f = open(".battle")
     
-    while(True):
-        line = f.readline()
-        if(line == f"[{col}]" or line == f"[{col}]\n"):
-            break
-        elif(line == "" or line == "\n"):
-            return str(res)
+    # while(True):
+    #     line = f.readline()
+    #     if(line == f"[{col}]" or line == f"[{col}]\n"):
+    #         break
+    #     elif(line == "" or line == "\n"):
+    #         return str(res)
         
-    nextLine = f.readline()
+    # nextLine = f.readline()
     
-    while(nextLine[0] != "["):
-        splitEgal = nextLine.split("=")
-        splitVirgule = splitEgal[0].split(",")
-        for i in range(0, len(splitVirgule)):
-            if(splitVirgule[i] == arm):
-                res += splitEgal[1]
+    # while(nextLine[0] != "["):
+    #     splitEgal = nextLine.split("=")
+    #     splitVirgule = splitEgal[0].split(",")
+    #     for i in range(0, len(splitVirgule)):
+    #         if(splitVirgule[i] == arm):
+    #             res += splitEgal[1]
             
                 
                         
         
     ##############TO DO : CALCULER LES POINTS
     
-    return res
+    return "0"
 
 class Robot():
     score_final = 0
