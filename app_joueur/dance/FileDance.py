@@ -2,7 +2,7 @@ class FileDance:
     def __init__(self,path):
         self.file = open(path, 'r')
         self.movement = [] #format: [(dir1,step1),(dir2,step2)]
-        self.colorDance = {} #format: {color1 : (bras,expr), color2 : (bras,expr)}
+        self.colorDance = {} #format: {color1 : ([bras1, bras2],expr), color2 : (bras,expr)}
         self.decode()
     
     def close(self):
@@ -33,7 +33,7 @@ class FileDance:
                         if(words[i][0]=="A"):
                             dance.append(words[i])
                         elif(words[i][0]=="X"):
-                            expression = words[i][0]
+                            expression = words[i]
                     self.colorDance[color] = (dance,expression)
                     line = self.readLine()
             else :                     
