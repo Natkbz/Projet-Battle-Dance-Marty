@@ -7,6 +7,8 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QFont, QPainter, QColor
 from robot.MartyContext import MartyContext
+from ui.control_window import ControlWindow
+
 
 # widget = tout élément visible à l'écran (bouton, label etc...)
 # layout = gestionnaire invisible pour organiser les widgets
@@ -185,4 +187,6 @@ class ConnectionWindow(QMainWindow):
         self.status_label.style().polish(self.status_label) # recalcule et applique le nouveau style
 
     def _open_control_window(self):
-        print("Ouverture de la fenêtre de contrôle...")
+        self.control_window = ControlWindow(self.marty)
+        self.control_window.show()
+        self.hide()

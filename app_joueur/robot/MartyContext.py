@@ -80,7 +80,7 @@ class MartyContext():
         
         
     def getBattery(self):
-        return self.marty.get_battery_remaining
+        return self.marty.get_battery_remaining()
     
     def getColor(self):
         return self.martyColor.detectColor()
