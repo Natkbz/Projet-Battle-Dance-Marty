@@ -92,14 +92,14 @@ class Client():
 # id1 = client.getId()
 # print(client.start(id1))
 # print(client.getScore(id1))
-#print(f"points du step : {client.sendStep("robtest1", "B", "ALU", "XSD")}")
+# print(f"points du step : {client.sendStep(id1, "N", "ALB", "XSD")}")
 # print(client.getScore(id1))
 # print(client.deconnecter(id1))
 # print(f"Mon id unique est : {id1}")
 # client2 = Client("127.0.0.1", 8080)
 # id2 = client2.getId()
 # print(f"Le miens est : {id2}")
-# #######################################
+# # #######################################
         
     
     
