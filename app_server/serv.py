@@ -1,0 +1,108 @@
+import http.server
+import socket
+from robot import Robot
+
+
+class Serv():
+    port = 8080
+    nombreDePasBattle = 0
+    liste_robots = []
+    chemin_battle = ""
+    
+    def __init__(self, chemin_battle, port):
+        self.port = port
+        self.chemin_battle = chemin_battle
+        
+        f = open(chemin_battle)
+        line = f.readline()
+        tab = line.split(" ")
+        self.nombreDePasBattle = str(tab[1])
+        f.close()
+        
+        ################### POUR LES TESTS ##################
+        robot_1 = Robot()
+        robot_1.setId("robtest1")
+        self.liste_robots.append(robot_1)
+        #####################################################
+        
+    def getIpServer(self):
+        hostname = socket.gethostname()
+        ip_locale = socket.gethostbyname(hostname)
+        
+        return ip_locale
+
+    def run(self) :
+        from handler import Handler
+        server = http.server.HTTPServer((self.getIpServer(), self.port), Handler)
+        server.serv_instance = self
+        print("serving at port :", self.port, " on ip : ", self.getIpServer())
+        server.serve_forever()
+
+    def recherche_robot(self, id):
+        for i in range(len(self.liste_robots)):
+            if(self.liste_robots[i].id == id):
+                return self.liste_robots[i]
+            
+    def supprimer_robot(self, id):
+        for i in range(len(self.liste_robots)):
+            if(self.liste_robots[i].id == id):
+                self.liste_robots.pop(i)
+                
+    def ajouter_robot(self, robot):
+        self.liste_robots.append(robot)
+        
+    def getNombreDePasBattle(self):
+        return str(self.nombreDePasBattle)
+                
+    def calculPoint(self, col, arm, exp):
+        res = 0
+        
+        f = open(self.chemin_battle)
+        
+        while(True):
+            line = f.readline()
+            if(line == f"[{col}]" or line == f"[{col}]\n"):
+                break
+            elif(line == "" or line == "\n"):
+                return str(res)
+            
+        nextLine = f.readline()
+        
+        while(nextLine[0] != "["):
+            splitEgal = nextLine.split("=")
+            splitVirgule = splitEgal[0].split(",")
+            for i in range(0, len(splitVirgule)):
+                if(exp == splitVirgule[i]):
+                    res += int(splitEgal[1])
+                    print("exp")
+                if(len(arm) > 4):
+                    if(arm == splitVirgule[i]):
+                        res += int(splitEgal[1])
+                        print("a+b = a+b")
+                    elif(arm[0:3] == splitVirgule[i]):
+                        res += int(splitEgal[1])
+                        print("a+b = a")
+                    elif(arm[4::] == splitVirgule[i]):
+                        res += int(splitEgal[1])
+                        print(f"a+b = b ({arm[4::]})")
+                else:
+                    if(arm == splitVirgule[i]):
+                        res += int(splitEgal[1])
+                        print("arm")
+            nextLine = f.readline()
+        
+        f.close()
+        return str(res)
+    
+
+
+
+
+
+
+
+
+        
+
+            
+                  
