@@ -52,7 +52,7 @@ class MartyContext():
         else : 
             return False
     
-    def eyes_expression(self,emotion,blocking):
+    def eyes_expression(self,emotion,blocking=True):
         valid_emotion = { "angry", "excited", "normal", "wide", "wiggle"}
         if emotion in valid_emotion:
             self.marty.eyes(emotion,1000,blocking)
