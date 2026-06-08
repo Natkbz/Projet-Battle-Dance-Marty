@@ -4,12 +4,14 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
+from ui.choregraphy_window import ChoregraphyWindow
 
 class DanceWindow(QMainWindow):
 
-    def __init__(self, file_path: str, parent=None):
+    def __init__(self, file_path: str, marty, parent=None):
         super().__init__()
         self.file_path = file_path
+        self.marty = marty
         self.parent_window = parent
         self.server_connected = False
 
@@ -108,8 +110,9 @@ class DanceWindow(QMainWindow):
             self._set_status("Connexion au serveur échouée", "status_error")
 
     def on_launch(self):
-        # test avec un print
-        print(f"Lancement de la chorégraphie : {self.file_path}")
+        self.chore_window = ChoregraphyWindow(self.file_path, self.marty, parent=self.parent_window)
+        self.chore_window.show()
+        self.hide()
 
     def _set_status(self, message: str, style_name: str):
         self.status_label.setText(message)

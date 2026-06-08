@@ -216,7 +216,7 @@ class ControlWindow(QMainWindow):
             "Fichiers Dance (*.dance);;Tous les fichiers (*)"
         )
         if file_path:
-            self.dance_window = DanceWindow(file_path, parent=self)
+            self.dance_window = DanceWindow(file_path, marty=self.marty, parent=self)
             self.dance_window.show()
             self.hide()  # cache la fenêtre de contrôle
 
