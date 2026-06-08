@@ -54,3 +54,13 @@ class MartyDance:
             self.marty.expression(expressionToDo)
             arm = "+".join(bras)
             self.client.sendStep(self.id,color,arm,expressionToDo)
+            
+    def end_battle(self):
+        self.client.deconnecter(self.id)
+    
+    def new_dance(self,path):
+        self.file_dance = FileDance(path)
+        self.move = self.file_dance.getMvt()
+        self.colorDance = self.file_dance.getColorDance()
+        return self.dance()
+        
