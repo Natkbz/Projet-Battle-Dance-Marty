@@ -10,7 +10,7 @@ class ControlWindow(QMainWindow):
     def __init__(self, marty):
         super().__init__()
         self.marty = marty
-        self.setWindowTitle("NDDance - Contrôle")
+        self.setWindowTitle("Controle")
         self.setMinimumSize(1000, 700)
 
         central_widget = QWidget()
@@ -29,7 +29,7 @@ class ControlWindow(QMainWindow):
         main_area = QHBoxLayout()
         main_layout.addLayout(main_area)
 
-        # --- Colonne bras (gauche) ---
+        # Colonne bras (à gauche) 
         arms_layout = QVBoxLayout()
         arms_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         arms_layout.setSpacing(10)
@@ -75,7 +75,7 @@ class ControlWindow(QMainWindow):
 
         main_area.addLayout(arms_layout)
 
-        # --- Zone centrale : flèches + couleur ---
+        # Zone centrale : flèches + couleur 
         center_layout = QVBoxLayout()
         center_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -124,7 +124,7 @@ class ControlWindow(QMainWindow):
 
         main_area.addLayout(center_layout)
 
-        # --- Barre du bas : expressions + importer ---
+        # Barre du bas : expressions + importer
         bottom_layout = QHBoxLayout()
 
         expressions = [
@@ -163,7 +163,7 @@ class ControlWindow(QMainWindow):
         self.color_timer.timeout.connect(self.on_read_color)
         self.color_timer.start(1000)
 
-    # --- Méthodes bras ---
+    # Méthodes bras
     def on_arm_right_back(self):
         self.marty.move_arm('ARB')
 
@@ -176,7 +176,7 @@ class ControlWindow(QMainWindow):
     def on_arm_left_up(self):
         self.marty.move_arm('ALU')
 
-    # --- Méthodes déplacements ---
+    # Méthodes déplacements 
     def on_forward(self):
         self.marty.move_foot('U', 1)
 
@@ -192,7 +192,7 @@ class ControlWindow(QMainWindow):
     def on_stand(self):
         self.marty.marty.stand_straight(500)
 
-    # --- Méthodes expressions ---
+    # Méthodes expressions
     def on_expression_normal(self):
         self.marty.eyes_expression('normal')
 
@@ -208,7 +208,7 @@ class ControlWindow(QMainWindow):
     def on_expression_wiggle(self):
         self.marty.eyes_expression('wiggle')
 
-    # --- Import .dance ---
+    # Import .dance 
     def import_dance_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self, "Importer un fichier dance", "",
@@ -217,7 +217,7 @@ class ControlWindow(QMainWindow):
         if file_path:
             print(f"Fichier sélectionné : {file_path}")
 
-    # --- Batterie ---
+    # Batterie 
     def update_battery(self):
         try:
             battery = self.marty.getBattery()
@@ -225,7 +225,7 @@ class ControlWindow(QMainWindow):
         except:
             self.battery_label.setText("Batterie : N/A")
 
-    # --- Couleur ---
+    # Couleur 
     def on_read_color(self):
         try:
             color_code = self.marty.getColor()

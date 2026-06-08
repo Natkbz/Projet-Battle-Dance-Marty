@@ -167,9 +167,13 @@ class ConnectionWindow(QMainWindow):
         self._set_status("Connexion en cours...", "status")
         self.marty = MartyContext(ip)
         success = self.marty.connect()
+        #self.marty = MartyContext(ip)
+        #self.marty.marty = None
+        #success = True
 
         if success:
             self._set_status(f"Connecté à {ip} !", "status_ok")
+            self.marty.CalibrateColor()
             self._open_control_window()
         else:
             self._set_status("Connexion échouée", "status_error")
