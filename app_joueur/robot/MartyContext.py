@@ -1,5 +1,8 @@
+import time
+
 from martypy import Marty
 from robot.MartyColor import MartyColor
+import threading
 
 class MartyContext():
     def __init__(self, addressIP):
@@ -37,7 +40,7 @@ class MartyContext():
     def move_arm(self,type):
         time_moov = 500
         angleHigh = 130
-        angleLow = 0
+        angleLow = -45
         if(type == 'ALU'):
             return self.marty.move_joint('left arm', angleHigh, time_moov)
         elif(type == 'ALB'):
@@ -49,10 +52,10 @@ class MartyContext():
         else : 
             return False
     
-    def eyes_expression(self,emotion):
+    def eyes_expression(self,emotion,blocking):
         valid_emotion = { "angry", "excited", "normal", "wide", "wiggle"}
         if emotion in valid_emotion:
-            self.marty.eyes(emotion,4000)
+            self.marty.eyes(emotion,1000,blocking)
         else : 
             print ("Emotion is not valid")
     
@@ -61,22 +64,58 @@ class MartyContext():
         if expr in valid_expression:
             match expr:
                 case "XNT":
-                    self.marty.stand_straight(1000,False)
-                    self.eyes_expression("normal")
+                    self.normal(1500)
+                    self.eyes_expression("normal",False)
+                    self.marty.hold_position(3000,True)
                 case "XSD":
-                    self.marty.stand_straight(1000,False)
-                    self.eyes_expression("wide")
+                    self.normal(1500)
+                    self.eyes_expression("wide",False)
+                    self.marty.disco_color("Blue")
+                    self.marty.hold_position(3000,True)
                 case "XNG":
-                    self.marty.stand_straight(1000,False)
-                    self.eyes_expression("angry")
+                    self.normal(1500)
+                    self.eyes_expression("angry",False)
+                    self.marty.disco_color("Red")
+                    self.marty.hold_position(3000,True)
                 case "XHP":
-                    self.marty.dance('right',4000,False)
-                    self.eyes_expression("normal")
+                    self.eyes_expression("normal",False)
+                    self.marty.disco_color("Green")
+                    self.dance()
                 case "XND":
-                    self.marty.dance('right',4000)
-                    self.eyes_expression("wiggle",False)
+                    def rainbow_eyes():
+                        colors = [(255, 0, 0),(255, 127, 0),(255, 255, 0),(0, 255, 0),(0, 0, 255),(75, 0, 130),(148, 0, 211)]
+                        for i in range(2):
+                            self.eyes_expression("wiggle",False)
+                            for color in colors:
+                                self.marty.disco_color(color)
+                                time.sleep(0.25)
+                    arc_en_ciel_thread = threading.Thread(target=rainbow_eyes)
+                    arc_en_ciel_thread.start()
+                    self.dance()
+            self.marty.disco_color("None")
+            self.normal(1500)
         else:
             print(f"Expression {expr} non valide ")
+        
+    def dance(self):
+        #block 1
+        self.marty.move_joint('left arm', 75, 800,False)
+        self.marty.move_joint('right arm', 75,800,False)
+        self.marty.move_joint('left knee', 20, 800,False)
+        self.marty.move_joint('right knee', 20,800)
+        #block 2
+        self.marty.move_joint('left arm', -45, 800,False)
+        self.marty.move_joint('right arm', 130, 800,False)
+        self.marty.move_joint('left knee', -20, 800,False)
+        self.marty.move_joint('right knee', -20, 800)
+        #block 3
+        self.marty.move_joint('left arm', 130, 800,False)
+        self.marty.move_joint('right arm', -45, 800,False)
+        self.marty.move_joint('left knee', 20, 800,False)
+        self.marty.move_joint('right knee', 20, 800)
+        
+        
+        
         
     def normal(self,duration):
         return self.marty.stand_straight(duration)
