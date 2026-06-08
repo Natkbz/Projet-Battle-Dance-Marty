@@ -22,6 +22,7 @@ class Serv():
         ################### POUR LES TESTS ##################
         robot_1 = Robot()
         robot_1.setId("robtest1")
+        robot_1.setNbrDePasRestants(1)
         self.liste_robots.append(robot_1)
         #####################################################
         
@@ -42,6 +43,8 @@ class Serv():
         for i in range(len(self.liste_robots)):
             if(self.liste_robots[i].id == id):
                 return self.liste_robots[i]
+        exception = Exception("Robot non trouvé")
+        raise exception
             
     def supprimer_robot(self, id):
         for i in range(len(self.liste_robots)):
@@ -84,7 +87,7 @@ class Serv():
                         print("a+b = a")
                     elif(arm[4::] == splitVirgule[i]):
                         res += int(splitEgal[1])
-                        print(f"a+b = b ({arm[4::]})")
+                        print(f"a+b = b")
                 else:
                     if(arm == splitVirgule[i]):
                         res += int(splitEgal[1])

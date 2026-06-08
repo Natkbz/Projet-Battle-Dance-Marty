@@ -12,7 +12,12 @@ class Robot():
         
     def addToScore_final(self, point):
         self.score_final += point
-        print("le score actuel est : ",self.score_final)
         
     def getScore_final(self):
         return self.score_final
+    
+    def decreaseNbrDePasRestants(self):
+        self.nombreDePasRestants -= 1
+        
+    def getNbrDePasRestants(self):
+        return self.nombreDePasRestants
