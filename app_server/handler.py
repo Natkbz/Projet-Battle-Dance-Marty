@@ -57,6 +57,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             
             try:
                 self.server.serv_instance.recherche_robot(robot_id).setNbrDePasRestants(int(self.server.serv_instance.getNombreDePasBattle()))
+                self.server.serv_instance.recherche_robot(robot_id).setScore(0)
                 
                 self.send_response(200)
                 self.send_header("Content-type", "text")

@@ -10,6 +10,9 @@ class Robot():
     def setNbrDePasRestants(self, nbr):
         self.nombreDePasRestants = nbr
         
+    def setScore(self, score):
+        self.score_final = score
+        
     def addToScore_final(self, point):
         self.score_final += point
         

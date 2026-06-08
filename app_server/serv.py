@@ -31,6 +31,15 @@ class Serv():
         ip_locale = socket.gethostbyname(hostname)
         
         return ip_locale
+    
+    def updateBattle(self, newChemin):
+        self.chemin_battle = newChemin
+        
+        f = open(newChemin)
+        line = f.readline()
+        tab = line.split(" ")
+        self.nombreDePasBattle = str(tab[1])
+        f.close()
 
     def run(self) :
         from handler import Handler
@@ -93,6 +102,8 @@ class Serv():
                         res += int(splitEgal[1])
                         print("arm")
             nextLine = f.readline()
+            if(nextLine == "" or nextLine == "\n"):
+                return str(res)
         
         f.close()
         return str(res)
