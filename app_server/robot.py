@@ -16,3 +16,6 @@ class Robot():
         
     def getScore_final(self):
         return self.score_final
+    
+    def decreaseNbrDePasRestants(self):
+        self.nombreDePasRestants -= 1

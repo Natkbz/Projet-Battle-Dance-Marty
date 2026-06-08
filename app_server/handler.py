@@ -15,15 +15,24 @@ class Handler(http.server.BaseHTTPRequestHandler):
         elif(list[1] == "/score"):
             length = int(self.headers['Content-Length'])
             robot_id = self.rfile.read(length).decode()
-            
-            self.send_response(200)
-            self.send_header("Content-type", "text")
-            self.end_headers()
-            
-            self.wfile.write(bytes(str(self.server.serv_instance.recherche_robot(robot_id).getScore_final()).encode()))              
-            print(self.server.serv_instance.recherche_robot(robot_id).getScore_final())
-            
-            
+
+            try:
+                self.server.serv_instance.recherche_robot(robot_id)
+                
+                self.send_response(200)
+                self.send_header("Content-type", "text")
+                self.end_headers()
+                
+                self.wfile.write(bytes(str(self.server.serv_instance.recherche_robot(robot_id).getScore_final()).encode()))
+                print(self.server.serv_instance.recherche_robot(robot_id).getScore_final())
+                
+            except Exception as e:
+                self.send_response(404)
+                self.send_header("Content-type", "text")
+                self.end_headers()
+                
+                self.wfile.write(bytes("Robot not found".encode()))
+
     def do_POST(self):
         request = self.requestline
         list = request.split(" ")
@@ -46,13 +55,24 @@ class Handler(http.server.BaseHTTPRequestHandler):
             robot_id = self.rfile.read(length).decode()
             print(robot_id)
             
-            self.server.serv_instance.recherche_robot(robot_id).setNbrDePasRestants(int(self.server.serv_instance.getNombreDePasBattle()))
+            try:
+                self.server.serv_instance.recherche_robot(robot_id).setNbrDePasRestants(int(self.server.serv_instance.getNombreDePasBattle()))
+                
+                self.send_response(200)
+                self.send_header("Content-type", "text")
+                self.end_headers()
+                
+                self.wfile.write(bytes(self.server.serv_instance.getNombreDePasBattle().encode()))
             
-            self.send_response(200)
-            self.send_header("Content-type", "text")
-            self.end_headers()
+            except Exception as e:
+                self.send_response(404)
+                self.send_header("Content-type", "text")
+                self.end_headers()
+                self.wfile.write(bytes("Robot not found".encode()))
             
-            self.wfile.write(bytes(self.server.serv_instance.getNombreDePasBattle().encode()))
+            
+            
+            
             
         elif(list[1] == "/bye"):
             length = int(self.headers['Content-Length'])
@@ -78,10 +98,23 @@ class Handler(http.server.BaseHTTPRequestHandler):
             exp = list_data[3]
             
             point = self.server.serv_instance.calculPoint(col, arm, exp)
-            self.server.serv_instance.recherche_robot(robot_id).addToScore_final(int(point))
             
-            self.send_response(200)
-            self.send_header("Content-type", "text")
-            self.end_headers()
+            try:
+                self.server.serv_instance.recherche_robot(robot_id).addToScore_final(int(point))
+                self.server.serv_instance.recherche_robot(robot_id).decreaseNbrDePasRestants()
+                
+                self.send_response(200)
+                self.send_header("Content-type", "text")
+                self.end_headers()
+                
+                self.wfile.write(bytes(point.encode()))
+                
+            except Exception as e:
+                self.send_response(404)
+                self.send_header("Content-type", "text")
+                self.end_headers()
+                self.wfile.write(bytes("Robot not found".encode()))
             
-            self.wfile.write(bytes(point.encode()))
+            
+            
+            
