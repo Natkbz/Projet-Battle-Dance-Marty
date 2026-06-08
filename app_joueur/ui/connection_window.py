@@ -7,6 +7,8 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QFont, QPainter, QColor
 from robot.MartyContext import MartyContext
+from ui.control_window import ControlWindow
+
 
 # widget = tout élément visible à l'écran (bouton, label etc...)
 # layout = gestionnaire invisible pour organiser les widgets
@@ -165,9 +167,13 @@ class ConnectionWindow(QMainWindow):
         self._set_status("Connexion en cours...", "status")
         self.marty = MartyContext(ip)
         success = self.marty.connect()
+        #self.marty = MartyContext(ip)
+        #self.marty.marty = None
+        #success = True
 
         if success:
             self._set_status(f"Connecté à {ip} !", "status_ok")
+            #self.marty.CalibrateColor()
             self._open_control_window()
         else:
             self._set_status("Connexion échouée", "status_error")
@@ -185,4 +191,6 @@ class ConnectionWindow(QMainWindow):
         self.status_label.style().polish(self.status_label) # recalcule et applique le nouveau style
 
     def _open_control_window(self):
-        print("Ouverture de la fenêtre de contrôle...")
+        self.control_window = ControlWindow(self.marty)
+        self.control_window.show()
+        self.hide()
