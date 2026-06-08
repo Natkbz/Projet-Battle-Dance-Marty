@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from ui.choregraphy_window import ChoregraphyWindow
+from dance.MartyDance import MartyDance
 
 class DanceWindow(QMainWindow):
 
@@ -12,6 +13,7 @@ class DanceWindow(QMainWindow):
         super().__init__()
         self.file_path = file_path
         self.marty = marty
+        self.marty_dance = None
         self.parent_window = parent
         self.server_connected = False
 
@@ -100,7 +102,8 @@ class DanceWindow(QMainWindow):
         self._set_status("Connexion en cours...", "status")
 
         # simulé pour l'instant
-        success = True
+        self.marty_dance = MartyDance(self.file_path, self.marty, ip)
+        success = self.marty_dance.test_connection()
 
         if success:
             self.server_connected = True
@@ -110,7 +113,8 @@ class DanceWindow(QMainWindow):
             self._set_status("Connexion au serveur échouée", "status_error")
 
     def on_launch(self):
-        self.chore_window = ChoregraphyWindow(self.file_path, self.marty, parent=self.parent_window)
+        print(self.marty_dance)
+        self.chore_window = ChoregraphyWindow(self.file_path, self.marty, self.marty_dance, parent=self.parent_window)
         self.chore_window.show()
         self.hide()
 

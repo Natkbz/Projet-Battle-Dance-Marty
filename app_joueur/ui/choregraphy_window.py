@@ -39,10 +39,12 @@ class EyesWidget(QWidget):
 
 class ChoregraphyWindow(QMainWindow):
 
-    def __init__(self, file_path: str, marty, parent=None):
+    def __init__(self, file_path: str, marty, marty_dance_, parent=None):
         super().__init__()
         self.file_path = file_path
         self.marty = marty
+        self.marty_dance = marty_dance_
+        print(self.marty_dance, marty_dance_)
         self.parent_window = parent
         self.is_running = False
 
@@ -86,27 +88,17 @@ class ChoregraphyWindow(QMainWindow):
         self.status_label.setText("Chorégraphie en cours...")
         self.btn_start.setVisible(False)
         
-        QTimer.singleShot(3000, self._complete_dance)
-        # plus tard : exécuter le vrai fichier .dance
+        score = self.marty_dance.dance()
         
-        self.is_running = False
-        self.eyes.set_color("#FF9999")  # rouge = en cours
-        self.btn_start.setVisible(True)
-
-    def _complete_dance(self):
-        import random
-        score = random.randint(0, 100)  # Remplacer par ~ self.marty.dance(self.file_path)
-
         self.status_label.setText(f"Score : {score}/100")
-        self.eyes.set_color("#88CFA8")  #  vert = terminé
-
-        # Retour à ControlWindow si on ferme la fenêtre
-
+        self.eyes.set_color("#88CFA8")  # Vert = terminé
+        self.btn_start.setVisible(True)
+        
     def _return_to_control(self):
         self.close()
         if self.parent_window:
             self.parent_window.show()
-            
+
     def closeEvent(self, event):
         if self.parent_window:
             self.parent_window.show()
