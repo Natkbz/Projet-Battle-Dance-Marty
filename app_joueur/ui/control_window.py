@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QTimer, QSize
 from PyQt6.QtGui import QIcon
 from robot.MartyContext import MartyContext
+from ui.dance_window import DanceWindow
 
 class ControlWindow(QMainWindow):
     def __init__(self, marty):
@@ -215,7 +216,9 @@ class ControlWindow(QMainWindow):
             "Fichiers Dance (*.dance);;Tous les fichiers (*)"
         )
         if file_path:
-            print(f"Fichier sélectionné : {file_path}")
+            self.dance_window = DanceWindow(file_path, parent=self)
+            self.dance_window.show()
+            self.hide()  # cache la fenêtre de contrôle
 
     # Batterie 
     def update_battery(self):
