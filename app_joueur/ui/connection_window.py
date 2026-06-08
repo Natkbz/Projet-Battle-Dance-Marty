@@ -173,7 +173,7 @@ class ConnectionWindow(QMainWindow):
 
         if success:
             self._set_status(f"Connecté à {ip} !", "status_ok")
-            self.marty.CalibrateColor()
+            #self.marty.CalibrateColor()
             self._open_control_window()
         else:
             self._set_status("Connexion échouée", "status_error")
