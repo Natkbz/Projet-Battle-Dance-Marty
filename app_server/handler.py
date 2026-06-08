@@ -100,8 +100,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
             point = self.server.serv_instance.calculPoint(col, arm, exp)
             
             try:
-                self.server.serv_instance.recherche_robot(robot_id).addToScore_final(int(point))
-                self.server.serv_instance.recherche_robot(robot_id).decreaseNbrDePasRestants()
+                robot = self.server.serv_instance.recherche_robot(robot_id)
+            
+                if(robot.getNbrDePasRestants() <= 0):
+                    point = "0"
+                
+                robot.addToScore_final(int(point))
+                robot.decreaseNbrDePasRestants()
                 
                 self.send_response(200)
                 self.send_header("Content-type", "text")
@@ -113,7 +118,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 self.send_response(404)
                 self.send_header("Content-type", "text")
                 self.end_headers()
-                self.wfile.write(bytes("Robot not found".encode()))
+                self.wfile.write(bytes("Robot non trouvé ou plus de pas restants".encode()))
             
             
             

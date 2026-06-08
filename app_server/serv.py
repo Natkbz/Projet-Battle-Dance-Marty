@@ -22,6 +22,7 @@ class Serv():
         ################### POUR LES TESTS ##################
         robot_1 = Robot()
         robot_1.setId("robtest1")
+        robot_1.setNbrDePasRestants(1)
         self.liste_robots.append(robot_1)
         #####################################################
         
