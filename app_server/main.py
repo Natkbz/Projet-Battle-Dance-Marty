@@ -1,4 +1,24 @@
-from serv import Serv
+"""from serv import Serv
 
 server = Serv("app_server/.battle", 8080)
-server.run()
+server.run()"""
+
+import sys
+from PyQt6.QtWidgets import QApplication
+from fileWindow import FileWindow
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    
+    # --- CHARGEMENT DU FICHIER QSS ---
+    try:
+        with open("app_server/styles/server.qss", "r") as style_file:
+            app.setStyleSheet(style_file.read())
+    except FileNotFoundError:
+        print("Fichier style.qss introuvable, chargement avec le style par défaut.")
+    # ---------------------------------
+
+    fenetre_demarrage = FileWindow()
+    fenetre_demarrage.show()
+    
+    sys.exit(app.exec())
