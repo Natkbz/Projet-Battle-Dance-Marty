@@ -1,17 +1,18 @@
-/* --- Fond général --- */
+/* -------------------------fileWindow------------------------------*/
+/* Fond général*/
 QWidget#centralWidget {
     background-color: #ffffff;
 }
 
-/* --- Titre Principal --- */
+/* Titre Principal */
 QLabel#titleLabel {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: bold; 
     color: #2c3e50;
     margin-bottom: 15px;
 }
 
-/* --- Bouton Parcourir --- */
+/* Bouton Parcourir*/
 QPushButton#btnBrowse {
     background-color: #f8f9fa;
     color: #333333;
@@ -20,17 +21,18 @@ QPushButton#btnBrowse {
     font-size: 14px;
     padding: 10px;
 }
-
+/*quand il est survolé*/
 QPushButton#btnBrowse:hover {
     background-color: #e9ecef;
     border: 1px solid #b3b3b3;
 }
 
+/*Quand il est pressé*/
 QPushButton#btnBrowse:pressed {
     background-color: #dee2e6;
 }
 
-/* --- Label du fichier --- */
+/* Label du fichier */
 QLabel#fileLabel {
     font-size: 13px;
     font-style: italic;
@@ -39,7 +41,7 @@ QLabel#fileLabel {
 
 
 
-/* --- Bouton Démarrer --- */
+/* Bouton Démarrer */
 QPushButton#btnStart {
     background-color: #2ecc71;
     color: white;
@@ -49,11 +51,92 @@ QPushButton#btnStart {
     border: none;
     padding: 10px;
 }
-
+/*quand il est survolé*/
 QPushButton#btnStart:hover {
     background-color: #27ae60;
 }
 
+/*Quand il est pressé*/
 QPushButton#btnStart:pressed {
     background-color: #219653;
+}
+
+/* ----------------------(ServerWindow)-------------------------*/
+
+/* Fond de la fenêtre principale */
+QWidget#serverWindowCentral {
+    background-color: #f4f6f8; 
+}
+
+/* Titres des sections Tableau et Console */
+QLabel#lblRobots, QLabel#lblLogs {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+QLabel#lblLogs {
+    margin-top: 10px; Espace supplémentaire au-dessus du titre des logs
+}
+
+/* Bandeau d'information du serveur (IP / Port) */
+QLabel#lblInfoServeur {
+    font-size: 14px; 
+    color: #27ae60; 
+    font-weight: bold; 
+    background-color: #e8f8f5; 
+    padding: 12px; 
+    border-radius: 6px;
+    border: 1px solid #d1f2eb;
+}
+/* Bouton de changement de fichier .battle */
+QPushButton#btnChangeBattle {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 13px;
+    border: none;
+}
+
+QPushButton#btnChangeBattle:hover {
+    background-color: #2980b9; /* Bleu plus foncé au survol */
+}
+
+QPushButton#btnChangeBattle:pressed {
+    background-color: #1f618d; /* Encore plus foncé quand on clique */
+}
+
+/* Tableau des robots */
+QTableWidget#tableauRobots {
+    background-color: white;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 14px;
+    gridline-color: #e0e0e0;
+}
+
+QTableWidget#tableauRobots::item {
+    padding: 5px;
+}
+
+/* Entête du tableau */
+QHeaderView::section {
+    background-color: #e9ecef;
+    font-weight: bold;
+    color: #333333;
+    border: 1px solid #cccccc;
+    padding: 4px;
+}
+
+/* Console de logs */
+QTextEdit#consoleLogs {
+    background-color: #1e1e1e; 
+    color: #61afef; 
+    font-family: 'Consolas', 'Courier New', monospace; 
+    font-size: 13px;
+    border-radius: 6px;
+    border: 1px solid #333333;
+    padding: 10px;
 }
