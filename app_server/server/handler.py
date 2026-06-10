@@ -1,6 +1,6 @@
 import http.server
 import random
-from robot import Robot
+from server.robot import Robot
 
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):

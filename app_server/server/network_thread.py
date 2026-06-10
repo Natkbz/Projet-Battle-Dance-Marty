@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QObject, QThread, pyqtSignal
-from serv import Serv
+from server.serv import Serv
 
 class ServeurSignaux(QObject):
     #Cette classe définit les signaux que le serveur va emettre et que l'interface va écouter

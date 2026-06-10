@@ -1,7 +1,7 @@
 import http.server
 import socket
-from robot import Robot
-
+from server.robot import Robot
+from server.handler import Handler
 
 class Serv():
     port = 8080
@@ -39,7 +39,7 @@ class Serv():
         f.close()
 
     def run(self) :
-        from handler import Handler
+
         server = http.server.HTTPServer((self.getIpServer(), self.port), Handler)
         server.serv_instance = self
         print("serving at port :", self.port, " on ip : ", self.getIpServer())

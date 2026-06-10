@@ -4,8 +4,8 @@ from PyQt6.QtWidgets import (
     QLabel, QLineEdit, QPushButton, QFileDialog
 )
 from PyQt6.QtCore import Qt
-from serverWindow import ServerWindow
-from network_thread import ThreadServeur
+from UI.serverWindow import ServerWindow
+from server.network_thread import ThreadServeur
 
 class FileWindow(QMainWindow):
     def __init__(self):

@@ -5,7 +5,7 @@ server.run()"""
 
 import sys
 from PyQt6.QtWidgets import QApplication
-from fileWindow import FileWindow
+from UI.fileWindow import FileWindow
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
