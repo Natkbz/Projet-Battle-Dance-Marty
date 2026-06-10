@@ -1,8 +1,3 @@
-"""from serv import Serv
-
-server = Serv("app_server/.battle", 8080)
-server.run()"""
-
 import sys
 from PyQt6.QtWidgets import QApplication
 from UI.fileWindow import FileWindow
