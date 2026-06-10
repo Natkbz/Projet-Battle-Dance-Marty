@@ -15,7 +15,7 @@ if __name__ == "__main__":
         with open("app_server/styles/server.qss", "r") as style_file:
             app.setStyleSheet(style_file.read())
     except FileNotFoundError:
-        print("Fichier style.qss introuvable, chargement avec le style par défaut.")
+        print("Fichier style.qss introuvable")
     #lancement de la première fenetre ou on doit choisir un fichier .battle
     fenetre_demarrage = FileWindow()
     fenetre_demarrage.show()

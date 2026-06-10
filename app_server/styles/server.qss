@@ -76,7 +76,7 @@ QLabel#lblRobots, QLabel#lblLogs {
 }
 
 QLabel#lblLogs {
-    margin-top: 10px; Espace supplémentaire au-dessus du titre des logs
+    margin-top: 10px; 
 }
 
 /* Bandeau d'information du serveur (IP / Port) */
@@ -89,6 +89,7 @@ QLabel#lblInfoServeur {
     border-radius: 6px;
     border: 1px solid #d1f2eb;
 }
+
 /* Bouton de changement de fichier .battle */
 QPushButton#btnChangeBattle {
     background-color: #3498db;
@@ -101,11 +102,11 @@ QPushButton#btnChangeBattle {
 }
 
 QPushButton#btnChangeBattle:hover {
-    background-color: #2980b9; /* Bleu plus foncé au survol */
+    background-color: #2980b9; /* on fonce au survol */
 }
 
 QPushButton#btnChangeBattle:pressed {
-    background-color: #1f618d; /* Encore plus foncé quand on clique */
+    background-color: #1f618d; /* on fonce encore plus quand on clique */
 }
 
 /* Tableau des robots */
