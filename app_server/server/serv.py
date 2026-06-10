@@ -1,7 +1,7 @@
 import http.server
 import socket
-from robot import Robot
-
+from server.robot import Robot
+from server.handler import Handler
 
 class Serv():
     port = 8080
@@ -9,22 +9,18 @@ class Serv():
     liste_robots = []
     chemin_battle = ""
     
-    def __init__(self, chemin_battle, port):
+    def __init__(self, chemin_battle, port,signaux):
         self.port = port
         self.chemin_battle = chemin_battle
+        #definition de signaux pour que handler les utilise
+        self.signaux = signaux
         
         f = open(chemin_battle)
+        #le nombre de pas est le deuxième mot de la premère ligne du .battle
         line = f.readline()
         tab = line.split(" ")
         self.nombreDePasBattle = str(tab[1])
         f.close()
-        
-        ################### POUR LES TESTS ##################
-        robot_1 = Robot()
-        robot_1.setId("robtest1")
-        robot_1.setNbrDePasRestants(1)
-        self.liste_robots.append(robot_1)
-        #####################################################
         
     def getIpServer(self):
         hostname = socket.gethostname()
@@ -33,6 +29,7 @@ class Serv():
         return ip_locale
     
     def updateBattle(self, newChemin):
+        #on change de .battle donc on récupère à nouveau le nombre de pas
         self.chemin_battle = newChemin
         
         f = open(newChemin)
@@ -42,7 +39,7 @@ class Serv():
         f.close()
 
     def run(self) :
-        from handler import Handler
+
         server = http.server.HTTPServer((self.getIpServer(), self.port), Handler)
         server.serv_instance = self
         print("serving at port :", self.port, " on ip : ", self.getIpServer())

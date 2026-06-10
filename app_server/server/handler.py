@@ -1,6 +1,6 @@
 import http.server
 import random
-from robot import Robot
+from server.robot import Robot
 
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
@@ -18,6 +18,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
             try:
                 self.server.serv_instance.recherche_robot(robot_id)
+                
+                #envoie d'un signal pour ajouter un log
+                signaux = self.server.serv_instance.signaux
+                signaux.requete_recue.emit(f"GET /score : Demande de score par {robot_id}")
                 
                 self.send_response(200)
                 self.send_header("Content-type", "text")
@@ -43,6 +47,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
             newRobot.setId(newId)
             
             self.server.serv_instance.ajouter_robot(newRobot)
+            #envoie du signal dans la console et pour dire qu'un robot a été ajouté
+            signaux = self.server.serv_instance.signaux
+            signaux.requete_recue.emit(f"POST /hello : Nouveau robot connecté (ID: {newId})")
+            signaux.robot_ajoute.emit(newId)
             
             self.send_response(200)
             self.send_header("Content-type", "text")
@@ -53,6 +61,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
         elif(list[1] == "/start"):
             length = int(self.headers['Content-Length'])
             robot_id = self.rfile.read(length).decode()
+            
+            #signal pour dire qu'un robot commence sa battle
+            signaux = self.server.serv_instance.signaux
+            signaux.requete_recue.emit(f"POST /start : Début de la battle pour {robot_id}")
+            
             print(robot_id)
             
             try:
@@ -81,6 +94,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
             
             self.server.serv_instance.supprimer_robot(robot_id)
             
+            #envoie de signal pour dire qu'un robot s'est déco à la console et à la liste de robot
+            signaux = self.server.serv_instance.signaux
+            signaux.requete_recue.emit(f"POST /bye : Déconnexion du robot {robot_id}")
+            signaux.robot_supprime.emit(robot_id)
+            
             self.send_response(200)
             self.send_header("Content-type", "text")
             self.end_headers()
@@ -108,6 +126,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 
                 robot.addToScore_final(int(point))
                 robot.decreaseNbrDePasRestants()
+                
+                #envoie de signaux pour dire qu'un nouveau score a été calculé à la console et au score ds le tableau
+                signaux = self.server.serv_instance.signaux
+                signaux.requete_recue.emit(f"POST /step : Le robot {robot_id} gagne {point} pts")
+                signaux.score_mis_a_jour.emit(robot_id, robot.getScore_final())
                 
                 self.send_response(200)
                 self.send_header("Content-type", "text")
