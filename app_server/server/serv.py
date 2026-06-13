@@ -6,12 +6,13 @@ from server.handler import Handler
 class Serv():
     port = 8080
     nombreDePasBattle = 0
-    liste_robots = []
     chemin_battle = ""
+    liste_robots = []
     
     def __init__(self, chemin_battle, port,signaux):
         self.port = port
         self.chemin_battle = chemin_battle
+        
         #definition de signaux pour que handler les utilise
         self.signaux = signaux
         
@@ -104,16 +105,3 @@ class Serv():
         
         f.close()
         return str(res)
-    
-
-
-
-
-
-
-
-
-        
-
-            
-                  
