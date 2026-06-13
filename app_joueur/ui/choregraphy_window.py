@@ -1,10 +1,9 @@
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout,
-    QLabel, QPushButton
+    QLabel, QPushButton, QFileDialog
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPainter, QColor
-from PyQt6.QtCore import QTimer
 
 class EyesWidget(QWidget):
     
@@ -39,12 +38,12 @@ class EyesWidget(QWidget):
 
 class ChoregraphyWindow(QMainWindow):
 
-    def __init__(self, file_path: str, marty, marty_dance_, parent=None):
+    def __init__(self, file_path: str, marty, marty_dance, dance_window, parent=None):
         super().__init__()
         self.file_path = file_path
         self.marty = marty
-        self.marty_dance = marty_dance_
-        print(self.marty_dance, marty_dance_)
+        self.marty_dance = marty_dance
+        self.dance_window = dance_window
         self.parent_window = parent
         self.is_running = False
 
@@ -54,33 +53,33 @@ class ChoregraphyWindow(QMainWindow):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
 
-        layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.setSpacing(20)
-        central_widget.setLayout(layout)
+        self.main_layout = QVBoxLayout()
+        self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.main_layout.setSpacing(20)
+        central_widget.setLayout(self.main_layout)
 
         # Yeux de Marty
         self.eyes = EyesWidget(color="#6395EE")
-        layout.addWidget(self.eyes, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.main_layout.addWidget(self.eyes, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Statut
         self.status_label = QLabel("Prêt à lancer")
         self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.status_label.setObjectName("heading")
-        layout.addWidget(self.status_label)
+        self.main_layout.addWidget(self.status_label)
 
         # Nom du fichier
         file_name = file_path.split("/")[-1]
-        file_label = QLabel(f"{file_name}")
-        file_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        file_label.setObjectName("subheading")
-        layout.addWidget(file_label)
+        self.file_label = QLabel(f"{file_name}")
+        self.file_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.file_label.setObjectName("subheading")
+        self.main_layout.addWidget(self.file_label)
 
         # Bouton lancer
         self.btn_start = QPushButton("▶  Lancer")
         self.btn_start.setObjectName("btn_primary")
         self.btn_start.clicked.connect(self.on_start)
-        layout.addWidget(self.btn_start)
+        self.main_layout.addWidget(self.btn_start)
 
     def on_start(self):
         self.is_running = True
@@ -90,14 +89,42 @@ class ChoregraphyWindow(QMainWindow):
         
         score = self.marty_dance.dance()
         
-        self.status_label.setText(f"Score : {score}/100")
+        self.status_label.setText(f"Score : {score}")
         self.eyes.set_color("#88CFA8")  # Vert = terminé
-        self.btn_start.setVisible(True)
+        self._show_end_buttons()
+    
+    def _show_end_buttons(self):
+        self.btn_return = QPushButton("← Retour au contrôle")
+        self.btn_return.setObjectName("btn_secondary")
+        self.btn_return.clicked.connect(self.return_control)
+        self.main_layout.addWidget(self.btn_return)
         
-    def _return_to_control(self):
+        self.btn_new_dance = QPushButton("▶ Nouvelle dance")
+        self.btn_new_dance.setObjectName("btn_primary")
+        self.btn_new_dance.clicked.connect(self.new_dance)
+        self.main_layout.addWidget(self.btn_new_dance)
+        
+    def return_control(self):
         self.close()
-        if self.parent_window:
-            self.parent_window.show()
+
+    def new_dance(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "Choisir un fichier dance", "",
+            "Fichiers Dance (*.dance);;Tous les fichiers (*)"
+        )
+        
+        if file_path:
+            
+            self.marty_dance.new_dance(file_path)
+            self.file_path = file_path
+            
+            new_file_name = file_path.split("/")[-1]
+            self.file_label.setText(new_file_name)
+            
+            self.btn_return.setVisible(False)
+            self.btn_new_dance.setVisible(False)
+            
+            self.on_start()
 
     def closeEvent(self, event):
         if self.parent_window:
