@@ -189,7 +189,7 @@ class ConnectionWindow(QMainWindow):
 
 class ConnectThread(QThread):
     """Thread pour gérer la connexion au robot sans bloquer l'UI."""
-    finished = pyqtSignal(bool, object)  # Signal émis quand la connexion est terminée (True = succès)
+    finished = pyqtSignal(bool, object)  # Signal émis quand la connexion est terminée
 
     def __init__(self, ip):
         super().__init__()
