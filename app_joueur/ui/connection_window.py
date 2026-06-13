@@ -122,26 +122,6 @@ class ConnectionWindow(QMainWindow):
         self.btn_connect.setObjectName("btn_primary")
         self.btn_connect.clicked.connect(self.on_connect)
 
-        # séparateur "ou"
-        or_layout = QHBoxLayout()
-        line_left = QFrame()    
-        line_left.setFrameShape(QFrame.Shape.HLine) # widget pour afficher une ligne horizontale
-        line_left.setStyleSheet("color: #e0eaf8;")
-        or_label = QLabel("ou")
-        or_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        or_label.setStyleSheet("color: #aabbcc; font-size: 11px;")
-        line_right = QFrame()
-        line_right.setFrameShape(QFrame.Shape.HLine)
-        line_right.setStyleSheet("color: #e0eaf8;")
-        or_layout.addWidget(line_left)
-        or_layout.addWidget(or_label)
-        or_layout.addWidget(line_right)
-
-        # bouton secondaire recherche automatique
-        self.btn_auto = QPushButton("Recherche automatique")
-        self.btn_auto.setObjectName("btn_secondary")
-        self.btn_auto.clicked.connect(self.on_auto_search)
-
         # ajout de tous les éléments dans la carte (ordre de haut en bas)
         layout.addWidget(heading)
         layout.addWidget(subheading)
@@ -150,8 +130,6 @@ class ConnectionWindow(QMainWindow):
         layout.addWidget(self.ip_input)
         layout.addSpacing(4)
         layout.addWidget(self.btn_connect)
-        layout.addLayout(or_layout)
-        layout.addWidget(self.btn_auto)
         layout.addSpacing(8)
         layout.addWidget(self.status_label)
 
@@ -177,10 +155,6 @@ class ConnectionWindow(QMainWindow):
             self._open_control_window()
         else:
             self._set_status("Connexion échouée", "status_error")
-
-    def on_auto_search(self):
-        # a implémenter plus tard (idée : nslookup)
-        self._set_status("Recherche en cours...", "status")
 
     def _set_status(self, message: str, style_name: str):
         """Met à jour le label de statut et son style."""
