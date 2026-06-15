@@ -74,6 +74,7 @@ class Serv():
             if(line == f"[{col}]" or line == f"[{col}]\n"):
                 break
             elif(line == "" or line == "\n"):
+                f.close()
                 return str(res)
             
         nextLine = f.readline()
@@ -101,6 +102,7 @@ class Serv():
                         print("arm")
             nextLine = f.readline()
             if(nextLine == "" or nextLine == "\n"):
+                f.close()
                 return str(res)
         
         f.close()

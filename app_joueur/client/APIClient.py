@@ -63,7 +63,7 @@ class Client():
 
 
 # ###############TESTS###################
-# client = Client("192.168.1.141", 8080)
+# client = Client("169.254.102.198", 8080)
 # id1 = client.getId()
 # print(client.start(id1))
 # print(client.getScore(id1))
