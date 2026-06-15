@@ -6,12 +6,13 @@ from server.handler import Handler
 class Serv():
     port = 8080
     nombreDePasBattle = 0
-    liste_robots = []
     chemin_battle = ""
+    liste_robots = []
     
     def __init__(self, chemin_battle, port,signaux):
         self.port = port
         self.chemin_battle = chemin_battle
+        
         #definition de signaux pour que handler les utilise
         self.signaux = signaux
         
@@ -73,6 +74,7 @@ class Serv():
             if(line == f"[{col}]" or line == f"[{col}]\n"):
                 break
             elif(line == "" or line == "\n"):
+                f.close()
                 return str(res)
             
         nextLine = f.readline()
@@ -100,20 +102,8 @@ class Serv():
                         print("arm")
             nextLine = f.readline()
             if(nextLine == "" or nextLine == "\n"):
+                f.close()
                 return str(res)
         
         f.close()
         return str(res)
-    
-
-
-
-
-
-
-
-
-        
-
-            
-                  
