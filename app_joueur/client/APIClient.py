@@ -30,7 +30,7 @@ class Client():
         except json.JSONDecodeError:
             parsed = {}
 
-        print(response.status, parsed)
+        print(f"{method} {path} : {response.status}(code), result : {parsed}")
         return response.status, parsed
 
 
@@ -67,8 +67,8 @@ class Client():
 # id1 = client.getId()
 # print(client.start(id1))
 # print(client.getScore(id1))
-# print(f"points du step : {client.sendStep(id1, 'N', 'ALB', 'XSD')}")
-# print(f"points du step : {client.sendStep(id1, 'N', 'ALB', 'XSD')}")
+# print(f"points du step total du step : {client.sendStep(id1, 'N', 'ALB', 'XSD')}")
+# print(f"points du step total du step : {client.sendStep(id1, 'N', 'ALB', 'XSD')}")
 # print(client.getScore(id1))
 # print(client.deconnecter(id1))
 # print(f"Mon id unique est : {id1}")
