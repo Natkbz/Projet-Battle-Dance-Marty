@@ -72,6 +72,7 @@ class Serv():
         while(True):
             line = f.readline()
             if(line == f"[{col}]" or line == f"[{col}]\n"):
+                f.close()
                 break
             elif(line == "" or line == "\n"):
                 f.close()
@@ -85,21 +86,21 @@ class Serv():
             for i in range(0, len(splitVirgule)):
                 if(exp == splitVirgule[i]):
                     res += int(splitEgal[1])
-                    print("exp")
+                    print(f"exp rapporte {int(splitEgal[1])} points")
                 if(len(arm) > 4):
                     if(arm == splitVirgule[i]):
                         res += int(splitEgal[1])
-                        print("a+b = a+b")
+                        print(f"arm1+arm2 rapporte {int(splitEgal[1])} points")
                     elif(arm[0:3] == splitVirgule[i]):
                         res += int(splitEgal[1])
-                        print("a+b = a")
+                        print(f"arm1 rapporte {int(splitEgal[1])} points")
                     elif(arm[4::] == splitVirgule[i]):
                         res += int(splitEgal[1])
-                        print(f"a+b = b")
+                        print(f"arm2 rapporte {int(splitEgal[1])} points")
                 else:
                     if(arm == splitVirgule[i]):
                         res += int(splitEgal[1])
-                        print("arm")
+                        print(f"arm rapporte {int(splitEgal[1])} points")
             nextLine = f.readline()
             if(nextLine == "" or nextLine == "\n"):
                 f.close()
