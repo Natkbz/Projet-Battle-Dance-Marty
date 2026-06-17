@@ -6,6 +6,7 @@ from PyQt6.QtCore import Qt, QTimer, QSize
 from PyQt6.QtGui import QIcon
 from robot.MartyContext import MartyContext
 from ui.dance_window import DanceWindow
+from ui.calibration_window import CalibrationWindow
 
 class ControlWindow(QMainWindow):
     def __init__(self, marty):
@@ -150,6 +151,11 @@ class ControlWindow(QMainWindow):
         self.btn_import_dance.setObjectName("btn_import")
         self.btn_import_dance.clicked.connect(self.import_dance_file)
         bottom_layout.addWidget(self.btn_import_dance)
+        
+        self.btn_calibrate = QPushButton("Calibrer couleurs")
+        self.btn_calibrate.setObjectName("btn_secondary")
+        self.btn_calibrate.clicked.connect(self.open_calibration)
+        bottom_layout.addWidget(self.btn_calibrate)
 
         main_layout.addLayout(bottom_layout)
 
@@ -245,7 +251,8 @@ class ControlWindow(QMainWindow):
             "G": "#4caf50",
             "R": "#e53935",
             "P": "#9c27b0",
-            "C": "#00bcd4"
+            "C": "#00bcd4",
+            "B": "#0000FF"
         }
         color = color_map.get(color_code, "white")
         self.color_label.setStyleSheet(f"""
@@ -253,3 +260,8 @@ class ControlWindow(QMainWindow):
             border: 2px solid #6395EE;
             border-radius: 5px;
         """)
+
+    def open_calibration(self):
+        self.calibration_window = CalibrationWindow(self.marty, parent=self)
+        self.calibration_window.show()
+        self.hide()

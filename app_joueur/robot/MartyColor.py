@@ -59,6 +59,23 @@ class MartyColor():
         print("calibrage finit ()",meanR," , ",meanG," , ",meanB)
         return (meanR,meanG,meanB)
     
+    def captureColorValue(self, code):
+        """Mesure et enregistre la couleur actuelle sous le robot (sans input, pour l'ui)."""
+        valeurR = []
+        valeurG = []
+        valeurB = []
+        for i in range(10):
+            color = self.getColorValue()
+            valeurR.append(color[0])
+            valeurG.append(color[1])
+            valeurB.append(color[2])
+            time.sleep(0.1)
+        meanR = sum(valeurR) / 10
+        meanG = sum(valeurG) / 10
+        meanB = sum(valeurB) / 10
+        self.colors[code] = (meanR, meanG, meanB)
+        return (meanR, meanG, meanB)
+    
     def lunchFullCalibration(self):
         print("Début de la calibration complète...")
         for code in self.colors.keys():
