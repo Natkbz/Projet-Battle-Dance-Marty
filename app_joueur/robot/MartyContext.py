@@ -14,6 +14,12 @@ class MartyContext():
         try:
             self.marty = Marty("wifi", self.addressIP)
             if self.marty.is_conn_ready():
+                #test que c'est bien un robot qui est connecté
+                battery_test = self.marty.get_battery_remaining()
+                
+                if battery_test is None or battery_test <= 0:
+                    print(f"L'adresse {self.addressIP} répond, mais ce n'est pas un robot Marty.")
+                    return False
                 self.marty.stand_straight(500)
                 self.martyColor = MartyColor(self.marty)
                 print("connexion réussi")
