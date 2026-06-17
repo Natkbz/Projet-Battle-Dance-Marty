@@ -37,7 +37,11 @@ class Client():
 
     def testConnection(self):
         status, data = self.request_json("GET", "/")
-        return data.get("version", "")
+        version = data.get("version", "")
+        if (version == "1.2"):
+            return True
+        else:
+            return False 
 
     def getId(self):
         status, data = self.request_json("POST", "/hello")
