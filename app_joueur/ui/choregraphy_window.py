@@ -2,9 +2,10 @@ from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout,
     QLabel, QPushButton
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer, QThread, pyqtSignal
 from PyQt6.QtGui import QPainter, QColor
 from PyQt6.QtCore import QTimer
+import random
 
 class EyesWidget(QWidget):
     
@@ -37,6 +38,26 @@ class EyesWidget(QWidget):
         painter.setBrush(QColor(255, 255, 255, 140))
         painter.drawEllipse(x + 52, y + 14, 16, 16)
 
+class DanceThread(QThread):
+    """Thread qui gère la danse pour ne pas bloquer l'UI."""
+    # Signal émis quand la danse est finie, il transporte le score (un entier)
+    finished_dance = pyqtSignal(int)
+
+    def __init__(self, marty_dance):
+        super().__init__()
+        self.marty_dance = marty_dance
+
+    def run(self):
+        # Cette méthode s'exécute en arrière-plan
+        try:
+            score = self.marty_dance.dance()
+            # On vérifie qu'on a bien un score valide avant de l'émettre
+            score_val = int(score) if score is not None else 0
+            self.finished_dance.emit(score_val)
+        except Exception as e:
+            print(f"Erreur pendant la danse : {e}")
+            self.finished_dance.emit(0)
+
 class ChoregraphyWindow(QMainWindow):
 
     def __init__(self, file_path: str, marty, marty_dance_, parent=None):
@@ -47,6 +68,11 @@ class ChoregraphyWindow(QMainWindow):
         print(self.marty_dance, marty_dance_)
         self.parent_window = parent
         self.is_running = False
+        
+        self.eye_timer = QTimer(self)
+        self.eye_timer.timeout.connect(self.animate_eyes)
+        self.party_colors = ["#6395EE", "#EE6363", "#62C6AA", "#EE63D2", "#EEEE63", "#9563EE", "#FF8C00"]
+        self.dance_thread = None
 
         self.setWindowTitle("Chorégraphie en cours")
         self.setMinimumSize(500, 400)
@@ -84,22 +110,45 @@ class ChoregraphyWindow(QMainWindow):
 
     def on_start(self):
         self.is_running = True
-        self.eyes.set_color("#6395EE")  # bleu = en cours
         self.status_label.setText("Chorégraphie en cours...")
         self.btn_start.setVisible(False)
         
-        score = self.marty_dance.dance()
+        # Lance le clignotement des yeux toutes les 400 ms
+        self.eye_timer.start(400)
         
-        self.status_label.setText(f"Score : {score}/100")
+        # Prépare et lance le thread de danse en arrière-plan
+        self.dance_thread = DanceThread(self.marty_dance)
+        self.dance_thread.finished_dance.connect(self.on_dance_finished)
+        self.dance_thread.start()
+    
+    def animate_eyes(self):
+        """Choisit une couleur au hasard pour animer les yeux."""
+        color = random.choice(self.party_colors)
+        self.eyes.set_color(color)
+
+    def on_dance_finished(self, score):
+        """Appelée automatiquement quand Marty a fini sa danse."""
+        self.is_running = False
+        
+        # Arrête le changement de couleur automatique
+        self.eye_timer.stop()
+        
+        # Remet l'UI à jour avec le score
+        self.status_label.setText(f"Score : {score}")
         self.eyes.set_color("#88CFA8")  # Vert = terminé
         self.btn_start.setVisible(True)
+        self.btn_start.setText("▶  Relancer")
         
     def _return_to_control(self):
         self.close()
         if self.parent_window:
             self.parent_window.show()
 
-    def closeEvent(self, event):
+    def closeEvent(self, event):  
+        # Si le thread tourne encore, on l'arrête pour éviter les fantômes
+        if self.is_running and self.dance_thread:
+            self.dance_thread.terminate() 
+            
         if self.parent_window:
             self.parent_window.show()
         event.accept()
