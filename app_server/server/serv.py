@@ -39,7 +39,7 @@ class Serv():
             couleur_actuelle = ""
             for ligne in lignes[1:]:
                 ligne = ligne.strip()
-                if not ligne: 
+                if not ligne: #pour gérer le saut de ligne
                     continue
                 
                 # Détection d'une couleur (ex: [N])
@@ -61,9 +61,9 @@ class Serv():
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             
             # on simule une connexion vers le routeur des robots.
-            s.connect(("192.168.1.254", 80)) 
+            s.connect(("192.168.0.1", 80)) 
             
-            ip_locale = s.getsockname()[0]
+            ip_locale = s.getsockname()[0] #tuple de la forme (ip,port)
             s.close()
             return ip_locale
         except Exception as e:
