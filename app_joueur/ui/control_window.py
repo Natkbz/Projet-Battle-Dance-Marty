@@ -40,7 +40,7 @@ class ControlWindow(QMainWindow):
         btn_size = 70  # taille carrée des boutons bras
 
         self.btn_arm_right_back = QPushButton()
-        self.btn_arm_right_back.setIcon(QIcon("app_joueur/assets/images/bras_arriere.png"))
+        self.btn_arm_right_back.setIcon(QIcon("app_joueur/assets/images/bras_arriere_droit.png"))
         self.btn_arm_right_back.setIconSize(icon_size)
         self.btn_arm_right_back.setFixedSize(btn_size, btn_size)
         self.btn_arm_right_back.setToolTip("Bras droit arrière")
@@ -49,7 +49,7 @@ class ControlWindow(QMainWindow):
         arms_layout.addWidget(self.btn_arm_right_back)
 
         self.btn_arm_left_back = QPushButton()
-        self.btn_arm_left_back.setIcon(QIcon("app_joueur/assets/images/bras_arriere.png"))
+        self.btn_arm_left_back.setIcon(QIcon("app_joueur/assets/images/bras_arriere_gauche.png"))
         self.btn_arm_left_back.setIconSize(icon_size)
         self.btn_arm_left_back.setFixedSize(btn_size, btn_size)
         self.btn_arm_left_back.setToolTip("Bras gauche arrière")
