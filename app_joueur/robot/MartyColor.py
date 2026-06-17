@@ -13,7 +13,7 @@ rouge : (106,17,21)
 class MartyColor():
     def __init__(self, marty_):
         self.marty = marty_
-        self.colors = {"N":(29,12,10), "Y" : (304,119,62), "G" : (52,45,34), "R" : (138,24,26), "P" : (164,35,49), "C":(81,79,93), "B":(38,23,28)}
+        self.colors = {"N":(29,12,10), "Y" : (296,116,62), "G" : (52,45,34), "R" : (138,24,26), "P" : (154,33,45), "C":(81,79,93), "B":(38,23,28)}
         self.full_name = {"N": "Noir", "Y": "Jaune", "G": "Vert", "R": "Rouge", "P":"Mauve", "C":"Bleu ciel", "B": "Bleu fonce"}
     
     def detectColor(self):
