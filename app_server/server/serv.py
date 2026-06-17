@@ -1,4 +1,5 @@
 import http.server
+from http.server import ThreadingHTTPServer
 import socket
 from server.robot import Robot
 from server.handler import Handler
@@ -17,6 +18,13 @@ class Serv():
         self.signaux = signaux
         
         self.charger_regles_battle(self.chemin_battle)
+    
+    def run(self) :
+
+        server = ThreadingHTTPServer((self.getIpServer(), self.port), Handler)
+        server.serv_instance = self
+        print("serving at port :", self.port, " on ip : ", self.getIpServer())
+        server.serve_forever()
     
     def charger_regles_battle(self, chemin):
         """Lit le fichier .battle une seule fois et le stocke en mémoire."""
@@ -73,14 +81,9 @@ class Serv():
         self.chemin_battle = newChemin
         self.charger_regles_battle(self.chemin_battle)
 
-    def run(self) :
 
-        server = http.server.HTTPServer((self.getIpServer(), self.port), Handler)
-        server.serv_instance = self
-        print("serving at port :", self.port, " on ip : ", self.getIpServer())
-        server.serve_forever()
 
-    def recherche_robot(self, id):
+    """def recherche_robot(self, id):
         for i in range(len(self.liste_robots)):
             if(self.liste_robots[i].id == id):
                 return self.liste_robots[i]
@@ -90,7 +93,20 @@ class Serv():
     def supprimer_robot(self, id):
         for i in range(len(self.liste_robots)):
             if(self.liste_robots[i].id == id):
-                self.liste_robots.pop(i)
+                self.liste_robots.pop(i)"""
+    def recherche_robot(self, id):
+        # On parcourt directement les objets, sans utiliser d'index (i)
+        for robot in self.liste_robots:
+            if robot.id == id:
+                return robot
+        raise Exception("Robot non trouvé")
+            
+    def supprimer_robot(self, id):
+        # On cherche l'objet et on demande à Python de le retirer proprement
+        for robot in self.liste_robots:
+            if robot.id == id:
+                self.liste_robots.remove(robot)
+                break
                 
     def ajouter_robot(self, robot):
         self.liste_robots.append(robot)
