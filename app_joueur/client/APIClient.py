@@ -48,15 +48,15 @@ class Client():
         return data.get("rid", "")
 
     def getScore(self, id):
-        status, data = self.request_json("GET", "/score", {"robot_id": id})
+        status, data = self.request_json("GET", "/score", {"rid": id})
         return data.get("score")
 
     def start(self, id):
-        status, data = self.request_json("POST", "/start", {"robot_id": id})
+        status, data = self.request_json("POST", "/start", {"rid": id})
         return data.get("steps")
 
     def deconnecter(self, id):
-        status, data = self.request_json("POST", "/bye", {"robot_id": id})
+        status, data = self.request_json("POST", "/bye", {"rid": id})
         return data.get("status", "")
 
     def sendStep(self, id, col, arm, exp):
