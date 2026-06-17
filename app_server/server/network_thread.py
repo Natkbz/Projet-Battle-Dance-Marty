@@ -7,7 +7,7 @@ class ServeurSignaux(QObject):
     robot_ajoute = pyqtSignal(str)               # Envoie l'ID du nouveau robot
     robot_supprime = pyqtSignal(str)             # Envoie l'ID du robot supprimé
     score_mis_a_jour = pyqtSignal(str, int)      # Envoie l'ID du robot et son nouveau score
-
+    pas_mis_a_jour = pyqtSignal(str, int)        #Envoie l'ID du robot et le nombre de pas restant
 
 
 class ThreadServeur(QThread):

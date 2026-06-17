@@ -43,10 +43,10 @@ class ServerWindow(QMainWindow):
         lbl_robots.setObjectName("lblRobots")
         layout.addWidget(lbl_robots)
 
-        # Création du tableau à 2 colonnes (ID et Score)
-        self.tableau_robots = QTableWidget(0, 2) #création tableau 0ligne et 2 colonne
+        # Création du tableau à 3 colonnes (ID Score, nb pas)
+        self.tableau_robots = QTableWidget(0, 3) #création tableau 0ligne et 3 colonne
         self.tableau_robots.setObjectName("tableauRobots")
-        self.tableau_robots.setHorizontalHeaderLabels(["ID du Robot", "Score Final"])
+        self.tableau_robots.setHorizontalHeaderLabels(["ID du Robot", "Score Final", "Pas Restants"])
 
         self.tableau_robots.horizontalHeader().setStretchLastSection(True) #force la colonne score a s'étirer
         self.tableau_robots.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers) #on empeche de modifier la case en cliquant dessus
@@ -92,6 +92,10 @@ class ServerWindow(QMainWindow):
         item_score = QTableWidgetItem("0")
         item_score.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
         self.tableau_robots.setItem(ligne, 1, item_score)
+        #ajout du nombre de pas restant
+        item_pas = QTableWidgetItem("-")
+        item_pas.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tableau_robots.setItem(ligne, 2, item_pas)
 
     def supprimer_robot(self, robot_id):
         #on recup la ligne correspondant au robot et on le supprime
@@ -117,6 +121,15 @@ class ServerWindow(QMainWindow):
                 return ligne
         return -1
     
+    def mettre_a_jour_pas(self, robot_id, pas_restants):
+    # On cherche la ligne du robot concerné
+        ligne = self._trouver_ligne_robot(robot_id)
+        if ligne != -1:
+            # Si on l'a trouvé, on met à jour la troisième colonne
+            item_pas = QTableWidgetItem(str(pas_restants))
+            item_pas.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.tableau_robots.setItem(ligne, 2, item_pas)
+    
     def on_change_battle(self):
         #Ouvre l'explorateur pour choisir un nouveau fichier et met à jour le serveur.
         file_path, _ = QFileDialog.getOpenFileName(
@@ -133,3 +146,5 @@ class ServerWindow(QMainWindow):
             # ajout ds la console du changement de fichier
             nom_fichier = os.path.basename(file_path)
             self.ajouter_log(f"Nouveau fichier chargé : {nom_fichier}")
+            
+    

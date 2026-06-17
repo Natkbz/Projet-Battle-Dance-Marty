@@ -75,7 +75,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 )
                 robot.setNbrDePasRestants(nombre_de_pas)
                 robot.setScore(0)
-
+                signaux.pas_mis_a_jour.emit(robot_id, nombre_de_pas)
                 self.send_json(200, {"nombre_de_pas": nombre_de_pas})
 
             except KeyError:
@@ -118,12 +118,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
                 robot.addToScore_final(int(point))
                 robot.decreaseNbrDePasRestants()
-
+                
                 signaux = self.server.serv_instance.signaux
                 signaux.requete_recue.emit(
                     f"POST /step : Le robot {robot_id} gagne {point} pts"
                 )
                 signaux.score_mis_a_jour.emit(robot_id, robot.getScore_final())
+                signaux.pas_mis_a_jour.emit(robot_id, robot.getNbrDePasRestants())
 
                 self.send_json(200, {"points": int(point)})
 
@@ -132,8 +133,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     400,
                     {"error": "Champs manquants (robot_id, col, arm, exp)"},
                 )
-            except Exception:
-                self.send_json(
-                    404,
-                    {"error": "Robot non trouvé ou plus de pas restants"},
-                )
+            except Exception as e:
+                ##self.send_json(404,{"error": "Robot non trouvé ou plus de pas restants"},)
+                self.send_json(500, {"error": f"Crash interne : {str(e)}"})
