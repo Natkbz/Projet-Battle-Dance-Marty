@@ -14,6 +14,7 @@ class Client():
         self.conn = http.client.HTTPConnection(self.ip, self.port)
 
 
+
     def request_json(self, method, path, data = None):
         if (data != None):
             body = json.dumps(data).encode("utf-8")

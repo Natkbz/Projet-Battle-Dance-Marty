@@ -4,8 +4,8 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QFrame
 )
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QIcon, QFont, QPainter, QColor
+from PyQt6.QtCore import Qt, QThread, pyqtSignal
+from PyQt6.QtGui import QIcon, QFont, QPainter, QColor, QCursor
 from robot.MartyContext import MartyContext
 from ui.control_window import ControlWindow
 
@@ -59,6 +59,7 @@ class ConnectionWindow(QMainWindow):
         self.setWindowTitle("NDDance")
         self.setMinimumSize(800, 600)
         self.setWindowIcon(QIcon("approbot/assets/images/robot_icon.png"))
+        self.connect_thread = None
 
         self.marty = None # instance de la classe pour contrôler le robot
 
@@ -135,27 +136,44 @@ class ConnectionWindow(QMainWindow):
 
     def on_connect(self):
         ip = self.ip_input.text().strip()
+        
+        self.setCursor(QCursor(Qt.CursorShape.WaitCursor)) # change le curseur (chargement)
+        self.btn_connect.setEnabled(False) 
+        self.btn_connect.setText("⏳ Connexion...") 
 
         # validation du format IPv4
         parts = ip.split(".")
         if len(parts) != 4 or any(not p.isdigit() or int(p) not in range(256) for p in parts):
             self._set_status("Adresse IP invalide", "status_error")
+            self.reset_connect_button() # réinitialise si ip invalide
             return
 
         self._set_status("Connexion en cours...", "status")
-        self.marty = MartyContext(ip)
-        success = self.marty.connect()
-        #self.marty = MartyContext(ip)
-        #self.marty.marty = None
-        #success = True
+        
+        # lance la connexion dans un thread
+        self.connect_thread = ConnectThread(ip)
+        self.connect_thread.finished.connect(self.on_connect_finished) # lie le signal 
+        self.connect_thread.start() # démarre le thread (ne bloque pas l'ui)
+                
+    def reset_connect_button(self):
+        self.setCursor(QCursor(Qt.CursorShape.ArrowCursor)) # rétablit le curseur normal
+        self.btn_connect.setEnabled(True)   # réactive le bouton
+        self.btn_connect.setText("Se connecter")    # rétablit le texte original 
+        
+    def on_connect_finished(self, success, marty):
+        """Méthode appelée quand le thread de connexion termine."""
+        
+        # réinitialise l'UI
+        self.reset_connect_button()
 
+        # affiche le résultat
         if success:
-            self._set_status(f"Connecté à {ip} !", "status_ok")
-            #self.marty.CalibrateColor()
+            self._set_status(f"Connecté à {self.ip_input.text()} !", "status_ok")
+            self.marty = marty  # récupère l'instance Marty du thread
             self._open_control_window()
         else:
             self._set_status("Connexion échouée", "status_error")
-
+    
     def _set_status(self, message: str, style_name: str):
         """Met à jour le label de statut et son style."""
         self.status_label.setText(message) # change le texte affiché par le label
@@ -168,3 +186,23 @@ class ConnectionWindow(QMainWindow):
         self.control_window = ControlWindow(self.marty)
         self.control_window.show()
         self.hide()
+
+class ConnectThread(QThread):
+    """Thread pour gérer la connexion au robot sans bloquer l'UI."""
+    finished = pyqtSignal(bool, object)  # Signal émis quand la connexion est terminée
+
+    def __init__(self, ip):
+        super().__init__()
+        self.ip = ip
+        self.marty = None
+        self.success = False
+
+    def run(self):
+        """Méthode exécutée dans le thread"""
+        try:
+            self.marty = MartyContext(self.ip)
+            self.success = self.marty.connect()
+        except Exception as e:
+            print(f"Erreur dans le thread : {e}")
+            self.success = False
+        self.finished.emit(self.success, self.marty)  # Émet le résultat 

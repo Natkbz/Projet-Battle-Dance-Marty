@@ -7,6 +7,12 @@ from PyQt6.QtGui import QIcon
 from ui.choregraphy_window import ChoregraphyWindow
 from dance.MartyDance import MartyDance
 
+
+import time
+import random
+
+
+
 class DanceWindow(QMainWindow):
 
     def __init__(self, file_path: str, marty, parent=None):
@@ -92,7 +98,7 @@ class DanceWindow(QMainWindow):
 
     def on_connect_server(self):
         ip = self.ip_input.text().strip()
-
+        
         # validation IP
         parts = ip.split(".")
         if len(parts) != 4 or any(not p.isdigit() or int(p) not in range(256) for p in parts):
@@ -124,7 +130,7 @@ class DanceWindow(QMainWindow):
         self.status_label.style().unpolish(self.status_label)
         self.status_label.style().polish(self.status_label)
     
-    def closeEvent(self):
+    def closeEvent(self,event):
         if self.parent_window:
             self.parent_window.show()
         event.accept() # marque un event comme traité donc pas de propragation

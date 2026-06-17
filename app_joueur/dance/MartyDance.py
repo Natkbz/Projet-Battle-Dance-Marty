@@ -13,7 +13,7 @@ class MartyDance:
         if not self.move:
             return False
         if not self.colorDance:
-            return False
+            return False 
         return True
         
     def test_connection(self):
@@ -62,5 +62,5 @@ class MartyDance:
         self.file_dance = FileDance(path)
         self.move = self.file_dance.getMvt()
         self.colorDance = self.file_dance.getColorDance()
-        return self.dance()
+        self.dance()
         
