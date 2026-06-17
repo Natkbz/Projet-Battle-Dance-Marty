@@ -49,7 +49,7 @@ class Client():
 
     def getScore(self, id):
         status, data = self.request_json("GET", "/score", {"rid": id})
-        return data.get("score")
+        return data.get("points")
 
     def start(self, id):
         status, data = self.request_json("POST", "/start", {"rid": id})

@@ -36,7 +36,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     f"GET /score : Demande de score par {robot_id}"
                 )
 
-                self.send_json(200, {"score": robot.getScore_final()})
+                self.send_json(200, {"points": robot.getScore_final()})
 
             except KeyError:
                 self.send_json(400, {"error": "Champ 'robot_id' manquant"})
