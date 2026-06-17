@@ -22,12 +22,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/":
-            self.send_json(200, {"version": self.server_version})
+            self.send_json(200, {"version": "1.2"})
 
         elif self.path == "/score":
             try:
                 data = self.read_json()
-                robot_id = data["robot_id"]           # KeyError si absent
+                robot_id = data["rid"]           # KeyError si absent
 
                 robot = self.server.serv_instance.recherche_robot(robot_id)
 
@@ -36,7 +36,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     f"GET /score : Demande de score par {robot_id}"
                 )
 
-                self.send_json(200, {"score": robot.getScore_final()})
+                self.send_json(200, {"points": robot.getScore_final()})
 
             except KeyError:
                 self.send_json(400, {"error": "Champ 'robot_id' manquant"})
@@ -57,12 +57,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
             )
             signaux.robot_ajoute.emit(new_id)
 
-            self.send_json(200, {"id": new_id})
+            self.send_json(200, {"rid": new_id})
 
         elif self.path == "/start":
             try:
                 data = self.read_json()
-                robot_id = data["robot_id"]
+                robot_id = data["rid"]
 
                 signaux = self.server.serv_instance.signaux
                 signaux.requete_recue.emit(
@@ -80,7 +80,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 robot.setRegles(regles_serveur)
                 
                 signaux.pas_mis_a_jour.emit(robot_id, nombre_de_pas)
-                self.send_json(200, {"nombre_de_pas": nombre_de_pas})
+                self.send_json(200, {"steps": nombre_de_pas})
 
             except KeyError:
                 self.send_json(400, {"error": "Champ 'robot_id' manquant"})
@@ -90,7 +90,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         elif self.path == "/bye":
             try:
                 data = self.read_json()
-                robot_id = data["robot_id"]
+                robot_id = data["rid"]
 
                 self.server.serv_instance.supprimer_robot(robot_id)
 
@@ -108,7 +108,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         elif self.path == "/step":
             try:
                 data = self.read_json()
-                robot_id = data["robot_id"]
+                robot_id = data["rid"]
                 col = data["col"]
                 arm = data["arm"]
                 exp = data["exp"]
@@ -140,7 +140,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             except KeyError:
                 self.send_json(
                     400,
-                    {"error": "Champs manquants (robot_id, col, arm, exp)"},
+                    {"error": "Champs manquants (rid, col, arm, exp)"},
                 )
             except Exception as e:
                 self.send_json(500, {"error": f"Crash interne : {str(e)}"})

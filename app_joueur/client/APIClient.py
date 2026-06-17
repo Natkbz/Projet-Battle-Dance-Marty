@@ -37,28 +37,32 @@ class Client():
 
     def testConnection(self):
         status, data = self.request_json("GET", "/")
-        return data.get("version", "")
+        version = data.get("version", "")
+        if (version == "1.2"):
+            return True
+        else:
+            return False 
 
     def getId(self):
         status, data = self.request_json("POST", "/hello")
-        return data.get("id", "")
+        return data.get("rid", "")
 
     def getScore(self, id):
-        status, data = self.request_json("GET", "/score", {"robot_id": id})
-        return data.get("score")
+        status, data = self.request_json("GET", "/score", {"rid": id})
+        return data.get("points")
 
     def start(self, id):
-        status, data = self.request_json("POST", "/start", {"robot_id": id})
-        return data.get("nombre_de_pas")
+        status, data = self.request_json("POST", "/start", {"rid": id})
+        return data.get("steps")
 
     def deconnecter(self, id):
-        status, data = self.request_json("POST", "/bye", {"robot_id": id})
+        status, data = self.request_json("POST", "/bye", {"rid": id})
         return data.get("status", "")
 
     def sendStep(self, id, col, arm, exp):
         status, data = self.request_json(
             "POST", "/step",
-            {"robot_id": id, "col": col, "arm": arm, "exp": exp}
+            {"rid": id, "col": col, "arm": arm, "exp": exp}
         )
         return data.get("points")
 
