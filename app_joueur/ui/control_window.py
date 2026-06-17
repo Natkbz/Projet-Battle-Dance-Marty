@@ -251,7 +251,8 @@ class ControlWindow(QMainWindow):
             "G": "#4caf50",
             "R": "#e53935",
             "P": "#9c27b0",
-            "C": "#00bcd4"
+            "C": "#00bcd4",
+            "B": "#0000FF"
         }
         color = color_map.get(color_code, "white")
         self.color_label.setStyleSheet(f"""
