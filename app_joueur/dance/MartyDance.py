@@ -45,15 +45,18 @@ class MartyDance:
         
     def check_color(self):
         color = self.marty.getColor()
-        print(color)
         if color in self.colorDance:
+            #on récupère ce qu'on doit faire en bras et expression
             bras = self.colorDance[color][0]
             expressionToDo = self.colorDance[color][1]
             for i in range(len(bras)):
                 self.marty.move_arm(bras[i])
             self.marty.expression(expressionToDo)
             arm = "+".join(bras)
+            print(f"color:${color} : ${arm} ${expressionToDo}")
             self.client.sendStep(self.id,color,arm,expressionToDo)
+        else:
+            self.client.sendStep(self.id,"Z","","")
             
     def end_battle(self):
         self.client.deconnecter(self.id)
