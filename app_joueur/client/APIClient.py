@@ -13,15 +13,13 @@ class Client():
         
         
     def testConnection(self):
-        self.conn.request("GET", "/")
-        
-        response = self.conn.getresponse()
-        
-        rep = response.read().decode()
-        print(response.status)
-        print(rep)
-        
-        return rep
+        try:
+            self.conn.request("GET", "/")
+            response = self.conn.getresponse()
+            return response.read().decode()
+        except Exception as e:
+            print(f"Erreur de connexion API : {e}")
+        return False
     
     
     def getId(self):
