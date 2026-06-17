@@ -20,7 +20,6 @@ class Serv():
         self.charger_regles_battle(self.chemin_battle)
     
     def run(self) :
-
         server = ThreadingHTTPServer((self.getIpServer(), self.port), Handler)
         server.serv_instance = self
         print("serving at port :", self.port, " on ip : ", self.getIpServer())
@@ -81,19 +80,6 @@ class Serv():
         self.chemin_battle = newChemin
         self.charger_regles_battle(self.chemin_battle)
 
-
-
-    """def recherche_robot(self, id):
-        for i in range(len(self.liste_robots)):
-            if(self.liste_robots[i].id == id):
-                return self.liste_robots[i]
-        exception = Exception("Robot non trouvé")
-        raise exception
-            
-    def supprimer_robot(self, id):
-        for i in range(len(self.liste_robots)):
-            if(self.liste_robots[i].id == id):
-                self.liste_robots.pop(i)"""
     def recherche_robot(self, id):
         # On parcourt directement les objets, sans utiliser d'index (i)
         for robot in self.liste_robots:
@@ -114,7 +100,7 @@ class Serv():
     def getNombreDePasBattle(self):
         return str(self.nombreDePasBattle)
     
-    def calculPoint(self, col, arm, exp,regle_du_robot):
+    def calculPoint(self, col, arm, exp, regle_du_robot):
         res = 0
         
         # Si la couleur n'existe pas dans le fichier, on retourne 0
@@ -133,7 +119,6 @@ class Serv():
             res += regles[arm]
             print(f"Combinaison complète ({arm}) rapporte {regles[arm]} points")
             
-
         # On découpe la chaîne si jamais c'était un +
         sous_armes = arm.split("+")
         for a in sous_armes:
