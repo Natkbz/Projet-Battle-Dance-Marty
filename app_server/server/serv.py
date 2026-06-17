@@ -1,4 +1,5 @@
 import http.server
+from http.server import ThreadingHTTPServer
 import socket
 from server.robot import Robot
 from server.handler import Handler
@@ -6,46 +7,83 @@ from server.handler import Handler
 class Serv():
     port = 8080
     nombreDePasBattle = 0
-    liste_robots = []
     chemin_battle = ""
+    liste_robots = []
     
     def __init__(self, chemin_battle, port,signaux):
         self.port = port
         self.chemin_battle = chemin_battle
+        
         #definition de signaux pour que handler les utilise
         self.signaux = signaux
         
-        f = open(chemin_battle)
-        #le nombre de pas est le deuxième mot de la premère ligne du .battle
-        line = f.readline()
-        tab = line.split(" ")
-        self.nombreDePasBattle = str(tab[1])
-        f.close()
-        
-    def getIpServer(self):
-        hostname = socket.gethostname()
-        ip_locale = socket.gethostbyname(hostname)
-        
-        return ip_locale
+        self.charger_regles_battle(self.chemin_battle)
     
-    def updateBattle(self, newChemin):
-        #on change de .battle donc on récupère à nouveau le nombre de pas
-        self.chemin_battle = newChemin
-        
-        f = open(newChemin)
-        line = f.readline()
-        tab = line.split(" ")
-        self.nombreDePasBattle = str(tab[1])
-        f.close()
-
     def run(self) :
 
-        server = http.server.HTTPServer((self.getIpServer(), self.port), Handler)
+        server = ThreadingHTTPServer((self.getIpServer(), self.port), Handler)
         server.serv_instance = self
         print("serving at port :", self.port, " on ip : ", self.getIpServer())
         server.serve_forever()
+    
+    def charger_regles_battle(self, chemin):
+        """Lit le fichier .battle une seule fois et le stocke en mémoire."""
+        self.regles_points = {}#format {color:{arm:ptn,arm,ptn,amr+arm:ptn,exp:ptn}}
+        with open(chemin, "r", encoding="utf-8") as f:
+            lignes = f.readlines()
+            
+            # Le nombre de pas est le dernier mot de la première ligne
+            premiere_ligne = lignes[0].strip().split(" ")
+            self.nombreDePasBattle = str(premiere_ligne[-1])
+            
+            # Construction du dictionnaire de règles
+            couleur_actuelle = ""
+            for ligne in lignes[1:]:
+                ligne = ligne.strip()
+                if not ligne: 
+                    continue
+                
+                # Détection d'une couleur (ex: [N])
+                if ligne.startswith("[") and ligne.endswith("]"):
+                    couleur_actuelle = ligne[1:-1]
+                    self.regles_points[couleur_actuelle] = {}
+                
+                # Détection d'une règle (ex: ALB,ARB=-1)
+                elif "=" in ligne and couleur_actuelle:
+                    gauche, droite = ligne.split("=")
+                    points = int(droite)
+                    elements = gauche.split(",")
+                    for element in elements:
+                        self.regles_points[couleur_actuelle][element] = points
+    
+    def getIpServer(self):
+        """hostname = socket.gethostname()
+        ip_locale = socket.gethostbyname(hostname)
+        
+        return ip_locale"""
+        try:
+            # On crée un socket fictif
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            
+            # on simule une connexion vers le routeur des robots.
+            s.connect(("192.168.1.254", 80)) 
+            
+            ip_locale = s.getsockname()[0]
+            s.close()
+            return ip_locale
+        except Exception as e:
+            print(f"Erreur de détection d'IP : {e}")
+            # Fallback local
+            return "127.0.0.1"
+    
+    def updateBattle(self, newChemin):
+        #on change de .battle donc on récupère à nouveau les regles
+        self.chemin_battle = newChemin
+        self.charger_regles_battle(self.chemin_battle)
 
-    def recherche_robot(self, id):
+
+
+    """def recherche_robot(self, id):
         for i in range(len(self.liste_robots)):
             if(self.liste_robots[i].id == id):
                 return self.liste_robots[i]
@@ -55,65 +93,53 @@ class Serv():
     def supprimer_robot(self, id):
         for i in range(len(self.liste_robots)):
             if(self.liste_robots[i].id == id):
-                self.liste_robots.pop(i)
+                self.liste_robots.pop(i)"""
+    def recherche_robot(self, id):
+        # On parcourt directement les objets, sans utiliser d'index (i)
+        for robot in self.liste_robots:
+            if robot.id == id:
+                return robot
+        raise Exception("Robot non trouvé")
+            
+    def supprimer_robot(self, id):
+        # On cherche l'objet et on demande à Python de le retirer proprement
+        for robot in self.liste_robots:
+            if robot.id == id:
+                self.liste_robots.remove(robot)
+                break
                 
     def ajouter_robot(self, robot):
         self.liste_robots.append(robot)
         
     def getNombreDePasBattle(self):
         return str(self.nombreDePasBattle)
-                
-    def calculPoint(self, col, arm, exp):
+    
+    def calculPoint(self, col, arm, exp,regle_du_robot):
         res = 0
         
-        f = open(self.chemin_battle)
-        
-        while(True):
-            line = f.readline()
-            if(line == f"[{col}]" or line == f"[{col}]\n"):
-                break
-            elif(line == "" or line == "\n"):
-                return str(res)
+        # Si la couleur n'existe pas dans le fichier, on retourne 0
+        if col not in regle_du_robot:
+            return "0"
             
-        nextLine = f.readline()
+        regles = regle_du_robot[col]
         
-        while(nextLine[0] != "["):
-            splitEgal = nextLine.split("=")
-            splitVirgule = splitEgal[0].split(",")
-            for i in range(0, len(splitVirgule)):
-                if(exp == splitVirgule[i]):
-                    res += int(splitEgal[1])
-                    print("exp")
-                if(len(arm) > 4):
-                    if(arm == splitVirgule[i]):
-                        res += int(splitEgal[1])
-                        print("a+b = a+b")
-                    elif(arm[0:3] == splitVirgule[i]):
-                        res += int(splitEgal[1])
-                        print("a+b = a")
-                    elif(arm[4::] == splitVirgule[i]):
-                        res += int(splitEgal[1])
-                        print(f"a+b = b")
-                else:
-                    if(arm == splitVirgule[i]):
-                        res += int(splitEgal[1])
-                        print("arm")
-            nextLine = f.readline()
-            if(nextLine == "" or nextLine == "\n"):
-                return str(res)
-        
-        f.close()
+        # 1. Calcul des points de l'expression
+        if exp in regles:
+            res += regles[exp]
+            print(f"exp ({exp}) rapporte {regles[exp]} points")
+            
+        # 2. Calcul des points des arm
+        if "+" in arm and arm in regles:
+            res += regles[arm]
+            print(f"Combinaison complète ({arm}) rapporte {regles[arm]} points")
+            
+
+        # On découpe la chaîne si jamais c'était un +
+        sous_armes = arm.split("+")
+        for a in sous_armes:
+            if a in regles:
+                res += regles[a]
+                print(f"Arme individuelle ({a}) rapporte {regles[a]} points")
+                    
         return str(res)
-    
-
-
-
-
-
-
-
-
-        
-
-            
-                  
+                    

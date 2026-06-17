@@ -92,7 +92,7 @@ class FileWindow(QMainWindow):
         self.thread_serveur.signaux.robot_ajoute.connect(self.server_window.ajouter_robot)
         self.thread_serveur.signaux.robot_supprime.connect(self.server_window.supprimer_robot)
         self.thread_serveur.signaux.score_mis_a_jour.connect(self.server_window.mettre_a_jour_score)
-        
+        self.thread_serveur.signaux.pas_mis_a_jour.connect(self.server_window.mettre_a_jour_pas)
         # Lancement du serveur dans un thread
         self.thread_serveur.start()
         
