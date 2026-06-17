@@ -75,6 +75,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 )
                 robot.setNbrDePasRestants(nombre_de_pas)
                 robot.setScore(0)
+                #on charge les regles actuelles
+                regles_serveur = self.server.serv_instance.regles_points
+                robot.setRegles(regles_serveur)
+                
                 signaux.pas_mis_a_jour.emit(robot_id, nombre_de_pas)
                 self.send_json(200, {"nombre_de_pas": nombre_de_pas})
 
@@ -109,7 +113,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 arm = data["arm"]
                 exp = data["exp"]
 
-                point = self.server.serv_instance.calculPoint(col, arm, exp)
+                
 
                 robot = self.server.serv_instance.recherche_robot(robot_id)
 
@@ -119,8 +123,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
                         f"POST /step : Rejeté, le robot {robot_id} n'a plus de pas"
                     )
                     self.send_json(403, {"error": "Plus de pas restants pour ce robot"})
-                    return  # <--- Ce return empêche la suite du code de s'exécuter
-
+                    return 
+                point = self.server.serv_instance.calculPoint(col, arm, exp,robot.getRegles())
                 robot.addToScore_final(int(point))
                 robot.decreaseNbrDePasRestants()
                 

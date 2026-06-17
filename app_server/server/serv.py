@@ -16,12 +16,6 @@ class Serv():
         #definition de signaux pour que handler les utilise
         self.signaux = signaux
         
-        """f = open(chemin_battle)
-        #le nombre de pas est le deuxième mot de la premère ligne du .battle
-        line = f.readline()
-        tab = line.split(" ")
-        self.nombreDePasBattle = str(tab[1])
-        f.close()"""
         self.charger_regles_battle(self.chemin_battle)
     
     def charger_regles_battle(self, chemin):
@@ -55,20 +49,28 @@ class Serv():
                         self.regles_points[couleur_actuelle][element] = points
     
     def getIpServer(self):
-        hostname = socket.gethostname()
+        """hostname = socket.gethostname()
         ip_locale = socket.gethostbyname(hostname)
         
-        return ip_locale
+        return ip_locale"""
+        try:
+            # On crée un socket fictif
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            
+            # on simule une connexion vers le routeur des robots.
+            s.connect(("192.168.1.254", 80)) 
+            
+            ip_locale = s.getsockname()[0]
+            s.close()
+            return ip_locale
+        except Exception as e:
+            print(f"Erreur de détection d'IP : {e}")
+            # Fallback local
+            return "127.0.0.1"
     
     def updateBattle(self, newChemin):
-        #on change de .battle donc on récupère à nouveau le nombre de pas
+        #on change de .battle donc on récupère à nouveau les regles
         self.chemin_battle = newChemin
-        """
-        f = open(newChemin)
-        line = f.readline()
-        tab = line.split(" ")
-        self.nombreDePasBattle = str(tab[1])
-        f.close()"""
         self.charger_regles_battle(self.chemin_battle)
 
     def run(self) :
@@ -95,60 +97,15 @@ class Serv():
         
     def getNombreDePasBattle(self):
         return str(self.nombreDePasBattle)
-    """            
-    def calculPoint(self, col, arm, exp):
-        res = 0
-        
-        f = open(self.chemin_battle)
-        
-        while(True):
-            line = f.readline()
-            if(line == f"[{col}]" or line == f"[{col}]\n"):
-                f.close()
-                break
-            elif(line == "" or line == "\n"):
-                f.close()
-                return str(res)
-            
-        nextLine = f.readline()
-        
-        while(nextLine[0] != "["):
-            splitEgal = nextLine.split("=")
-            splitVirgule = splitEgal[0].split(",")
-            for i in range(0, len(splitVirgule)):
-                if(exp == splitVirgule[i]):
-                    res += int(splitEgal[1])
-                    print(f"exp rapporte {int(splitEgal[1])} points")
-                if(len(arm) > 4):
-                    if(arm == splitVirgule[i]):
-                        res += int(splitEgal[1])
-                        print(f"arm1+arm2 rapporte {int(splitEgal[1])} points")
-                    elif(arm[0:3] == splitVirgule[i]):
-                        res += int(splitEgal[1])
-                        print(f"arm1 rapporte {int(splitEgal[1])} points")
-                    elif(arm[4::] == splitVirgule[i]):
-                        res += int(splitEgal[1])
-                        print(f"arm2 rapporte {int(splitEgal[1])} points")
-                else:
-                    if(arm == splitVirgule[i]):
-                        res += int(splitEgal[1])
-                        print(f"arm rapporte {int(splitEgal[1])} points")
-            nextLine = f.readline()
-            if(nextLine == "" or nextLine == "\n"):
-                f.close()
-                return str(res)
-        
-        f.close()
-        return str(res)
-        """
-    def calculPoint(self, col, arm, exp):
+    
+    def calculPoint(self, col, arm, exp,regle_du_robot):
         res = 0
         
         # Si la couleur n'existe pas dans le fichier, on retourne 0
-        if col not in self.regles_points:
+        if col not in regle_du_robot:
             return "0"
             
-        regles = self.regles_points[col]
+        regles = regle_du_robot[col]
         
         # 1. Calcul des points de l'expression
         if exp in regles:
