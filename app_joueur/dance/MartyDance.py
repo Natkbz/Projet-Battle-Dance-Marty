@@ -13,7 +13,7 @@ class MartyDance:
         if not self.move:
             return False
         if not self.colorDance:
-            return False
+            return False 
         return True
         
     def test_connection(self):
