@@ -56,10 +56,6 @@ class Serv():
                         self.regles_points[couleur_actuelle][element] = points
     
     def getIpServer(self):
-        """hostname = socket.gethostname()
-        ip_locale = socket.gethostbyname(hostname)
-        
-        return ip_locale"""
         try:
             # On crée un socket fictif
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
