@@ -27,7 +27,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         elif self.path == "/score":
             try:
                 data = self.read_json()
-                robot_id = data["robot_id"]           # KeyError si absent
+                robot_id = data["rid"]           # KeyError si absent
 
                 robot = self.server.serv_instance.recherche_robot(robot_id)
 
@@ -62,7 +62,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         elif self.path == "/start":
             try:
                 data = self.read_json()
-                robot_id = data["robot_id"]
+                robot_id = data["rid"]
 
                 signaux = self.server.serv_instance.signaux
                 signaux.requete_recue.emit(
@@ -90,7 +90,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         elif self.path == "/bye":
             try:
                 data = self.read_json()
-                robot_id = data["robot_id"]
+                robot_id = data["rid"]
 
                 self.server.serv_instance.supprimer_robot(robot_id)
 
