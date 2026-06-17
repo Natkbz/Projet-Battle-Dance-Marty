@@ -185,4 +185,5 @@ class ChoregraphyWindow(QMainWindow):
             
         if self.parent_window:
             self.parent_window.show()
+        self.marty_dance.end_battle()
         event.accept()
