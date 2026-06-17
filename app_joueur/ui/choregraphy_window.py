@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout,
-    QLabel, QPushButton
+    QLabel, QPushButton,QFileDialog
 )
 from PyQt6.QtCore import Qt, QTimer, QThread, pyqtSignal
 from PyQt6.QtGui import QPainter, QColor
@@ -97,21 +97,28 @@ class ChoregraphyWindow(QMainWindow):
 
         # Nom du fichier
         file_name = file_path.split("/")[-1]
-        file_label = QLabel(f"{file_name}")
-        file_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        file_label.setObjectName("subheading")
-        layout.addWidget(file_label)
+        self.file_label = QLabel(f"{file_name}") 
+        self.file_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.file_label.setObjectName("subheading")
+        layout.addWidget(self.file_label)
 
         # Bouton lancer
         self.btn_start = QPushButton("▶  Lancer")
         self.btn_start.setObjectName("btn_primary")
         self.btn_start.clicked.connect(self.on_start)
         layout.addWidget(self.btn_start)
+        
+        #bouton pour charger un nouveau fichier
+        self.btn_load_new = QPushButton("📁 Charger un autre fichier")
+        self.btn_load_new.setObjectName("btn_secondary") # ou btn_primary selon ton QSS
+        self.btn_load_new.clicked.connect(self.on_load_new)
+        layout.addWidget(self.btn_load_new)
 
     def on_start(self):
         self.is_running = True
         self.status_label.setText("Chorégraphie en cours...")
         self.btn_start.setVisible(False)
+        self.btn_load_new.setVisible(False)
         
         # Lance le clignotement des yeux toutes les 400 ms
         self.eye_timer.start(400)
@@ -138,14 +145,41 @@ class ChoregraphyWindow(QMainWindow):
         self.eyes.set_color("#88CFA8")  # Vert = terminé
         self.btn_start.setVisible(True)
         self.btn_start.setText("▶  Relancer")
+        self.btn_load_new.setVisible(True)
+    def on_load_new(self):
+        """Ouvre un explorateur pour charger un nouveau fichier .dance."""
+        # On ouvre la fenêtre Windows/Mac pour choisir le fichier
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "Choisir une autre chorégraphie", "",
+            "Fichiers Dance (*.dance);;Tous les fichiers (*)"
+        )
         
+        # Si l'utilisateur a bien choisi un fichie
+        if file_path:
+            self.file_path = file_path
+            file_name = file_path.split("/")[-1]
+            self.file_label.setText(file_name) # On change le nom écrit sur l'interface
+            
+            try:
+                # Le robot charge les nouvelles données.
+                self.marty_dance.new_dance(file_path)
+                
+                # On rafraîchit l'interface pour qu'elle soit prête pour un nouveau clic
+                self.status_label.setText("Nouvelle chorégraphie chargée !")
+                self.eyes.set_color("#6395EE")  # Les yeux redeviennent bleus (prêt)
+                self.btn_start.setText("▶  Lancer")
+                
+            except Exception as e:
+                self.status_label.setText("Erreur lors du décodage du fichier")
+                print(f"Erreur de chargement : {e}")
+    
     def _return_to_control(self):
         self.close()
         if self.parent_window:
             self.parent_window.show()
 
     def closeEvent(self, event):  
-        # Si le thread tourne encore, on l'arrête pour éviter les fantômes
+        # Si le thread tourne encore, on l'arrête 
         if self.is_running and self.dance_thread:
             self.dance_thread.terminate() 
             

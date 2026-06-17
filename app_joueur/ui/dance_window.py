@@ -11,20 +11,6 @@ from dance.MartyDance import MartyDance
 import time
 import random
 
-class MockMartyDance:
-    """Doublure qui simule le comportement de MartyDance sans matériel."""
-    def dance(self):
-        print("🤖 [MODE TEST] La fausse danse commence...")
-        
-        # On simule 8 étapes de danse qui durent 1 seconde chacune
-        for i in range(8):
-            print(f"🤖 [MODE TEST] Mouvement {i+1}/8...")
-            time.sleep(1)  # Imite le temps que prend un vrai mouvement de robot
-            
-        faux_score = random.randint(40, 100)
-        print(f"🤖 [MODE TEST] Danse terminée ! Score : {faux_score}")
-        
-        return faux_score
 
 
 class DanceWindow(QMainWindow):
@@ -112,17 +98,6 @@ class DanceWindow(QMainWindow):
 
     def on_connect_server(self):
         ip = self.ip_input.text().strip()
-
-        
-        # --- NOUVEAU : MODE TEST SANS ROBOT ---
-        if ip == "0.0.0.0":
-            self.server_connected = True
-            self._set_status("MODE TEST ACTIVÉ", "status_ok")
-            self.marty_dance = MockMartyDance() # On utilise la doublure !
-            self.btn_launch.setVisible(True)
-            return
-        # --------------------------------------
-        
         
         # validation IP
         parts = ip.split(".")
