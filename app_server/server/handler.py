@@ -143,5 +143,4 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     {"error": "Champs manquants (robot_id, col, arm, exp)"},
                 )
             except Exception as e:
-                ##self.send_json(404,{"error": "Robot non trouvé ou plus de pas restants"},)
                 self.send_json(500, {"error": f"Crash interne : {str(e)}"})
