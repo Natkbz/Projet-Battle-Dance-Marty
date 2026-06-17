@@ -65,5 +65,5 @@ class MartyDance:
         self.file_dance = FileDance(path)
         self.move = self.file_dance.getMvt()
         self.colorDance = self.file_dance.getColorDance()
-        self.dance()
+        
         
