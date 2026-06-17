@@ -24,3 +24,10 @@ class Robot():
         
     def getNbrDePasRestants(self):
         return self.nombreDePasRestants
+    
+    def setRegles(self, regles_du_serveur):
+        # On enregistre une copie des regles si jamais le fichier est changer pdt la battle
+        self.regles = regles_du_serveur.copy()
+        
+    def getRegles(self):
+        return self.regles
