@@ -16,13 +16,44 @@ class Serv():
         #definition de signaux pour que handler les utilise
         self.signaux = signaux
         
-        f = open(chemin_battle)
+        """f = open(chemin_battle)
         #le nombre de pas est le deuxième mot de la premère ligne du .battle
         line = f.readline()
         tab = line.split(" ")
         self.nombreDePasBattle = str(tab[1])
-        f.close()
-        
+        f.close()"""
+        self.charger_regles_battle(self.chemin_battle)
+    
+    def charger_regles_battle(self, chemin):
+        """Lit le fichier .battle une seule fois et le stocke en mémoire."""
+        self.regles_points = {}#format {color:{arm:ptn,arm,ptn,amr+arm:ptn,exp:ptn}}
+        with open(chemin, "r", encoding="utf-8") as f:
+            lignes = f.readlines()
+            
+            # Le nombre de pas est le dernier mot de la première ligne
+            premiere_ligne = lignes[0].strip().split(" ")
+            self.nombreDePasBattle = str(premiere_ligne[-1])
+            
+            # Construction du dictionnaire de règles
+            couleur_actuelle = ""
+            for ligne in lignes[1:]:
+                ligne = ligne.strip()
+                if not ligne: 
+                    continue
+                
+                # Détection d'une couleur (ex: [N])
+                if ligne.startswith("[") and ligne.endswith("]"):
+                    couleur_actuelle = ligne[1:-1]
+                    self.regles_points[couleur_actuelle] = {}
+                
+                # Détection d'une règle (ex: ALB,ARB=-1)
+                elif "=" in ligne and couleur_actuelle:
+                    gauche, droite = ligne.split("=")
+                    points = int(droite)
+                    elements = gauche.split(",")
+                    for element in elements:
+                        self.regles_points[couleur_actuelle][element] = points
+    
     def getIpServer(self):
         hostname = socket.gethostname()
         ip_locale = socket.gethostbyname(hostname)
@@ -32,12 +63,13 @@ class Serv():
     def updateBattle(self, newChemin):
         #on change de .battle donc on récupère à nouveau le nombre de pas
         self.chemin_battle = newChemin
-        
+        """
         f = open(newChemin)
         line = f.readline()
         tab = line.split(" ")
         self.nombreDePasBattle = str(tab[1])
-        f.close()
+        f.close()"""
+        self.charger_regles_battle(self.chemin_battle)
 
     def run(self) :
 
@@ -63,7 +95,7 @@ class Serv():
         
     def getNombreDePasBattle(self):
         return str(self.nombreDePasBattle)
-                
+    """            
     def calculPoint(self, col, arm, exp):
         res = 0
         
@@ -108,3 +140,33 @@ class Serv():
         
         f.close()
         return str(res)
+        """
+    def calculPoint(self, col, arm, exp):
+        res = 0
+        
+        # Si la couleur n'existe pas dans le fichier, on retourne 0
+        if col not in self.regles_points:
+            return "0"
+            
+        regles = self.regles_points[col]
+        
+        # 1. Calcul des points de l'expression
+        if exp in regles:
+            res += regles[exp]
+            print(f"exp ({exp}) rapporte {regles[exp]} points")
+            
+        # 2. Calcul des points des arm
+        if "+" in arm and arm in regles:
+            res += regles[arm]
+            print(f"Combinaison complète ({arm}) rapporte {regles[arm]} points")
+            
+
+        # On découpe la chaîne si jamais c'était un +
+        sous_armes = arm.split("+")
+        for a in sous_armes:
+            if a in regles:
+                res += regles[a]
+                print(f"Arme individuelle ({a}) rapporte {regles[a]} points")
+                    
+        return str(res)
+                    

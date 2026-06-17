@@ -114,7 +114,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 robot = self.server.serv_instance.recherche_robot(robot_id)
 
                 if robot.getNbrDePasRestants() <= 0:
-                    point = "0"
+                    signaux = self.server.serv_instance.signaux
+                    signaux.requete_recue.emit(
+                        f"POST /step : Rejeté, le robot {robot_id} n'a plus de pas"
+                    )
+                    self.send_json(403, {"error": "Plus de pas restants pour ce robot"})
+                    return  # <--- Ce return empêche la suite du code de s'exécuter
 
                 robot.addToScore_final(int(point))
                 robot.decreaseNbrDePasRestants()
